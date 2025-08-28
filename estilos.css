@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Banner general */
+.banner {
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;            /* Centrar verticalmente */
+  justify-content: space-between; /* Imagen izquierda - Texto - Imagen derecha */
+  padding: 20px 40px;
+  color: rgb(111, 29, 69);
+  text-align: center;
+}
+
+/* Imágenes */
+.banner-img {
+  width: 80px;
+  height: auto;
+}
+
+/* Contenedor del texto central */
+.banner-text {
+  flex: 1;               /* Que ocupe el espacio central */
+  text-align: center;
+}
+
+/* Título */
+.banner-text h1 {
+  margin: 0;
+  font-size: 3em;
+}
+
+/* Subtítulo dentro del banner */
+.banner-text .subtitulo {
+  margin: 5px 0 0 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+ 
+/* Sección de presentación */
+.presentacion {
+  padding: 30px;
+  text-align: center;
+  font-size: 1.5em;
+  color: white;
+  background-color: rgb(111, 29, 69);
+}
+
+/* Sección de integrantes */
+.integrantes {
+  padding: 30px;
+  background-color: #fff;
+  text-align: center;
+  color: rgb(111, 29, 69);
+}
+
+.integrantes h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.integrantes ul {
+  list-style: none;   /* Quita los puntos */
+  padding: 0;
+}
+
+.integrantes li {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+/* Sección de Docentes*/
+.Docentes {
+  padding: 30px;
+  background-color: #fff;
+  text-align: center;
+  color: rgb(111, 29, 69);
+}
+
+.Docentes h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.Docentes ul {
+  list-style: none;   /* Quita los puntos */
+  padding: 0;
+}
+
+.Docentes li {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
