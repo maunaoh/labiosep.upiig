@@ -1,3 +1,67 @@
+/* Barra de navegación fija */
+.navbar {
+  background-color: white;
+  padding: 8px;
+  text-align: center;
+  position: sticky;  /* 🔹 Siempre visible */
+  top: 0;           /* Se pega arriba */
+  z-index: 1000;    /* Queda por encima del contenido */
+}
+
+/* Lista principal */
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Links principales */
+.navbar a {
+  color: rgb(111,29,69);
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* --- Submenú --- */
+.submenu ul {
+  display: none;             /* Oculto por defecto */
+  position: absolute;        /* Desplegable */
+  background-color: white;
+  list-style: none;
+  padding: 10px 10px;
+  margin: 0;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+.submenu:hover ul {
+  display: block;            /* Se muestra al pasar el mouse */
+}
+
+.submenu ul li {
+  width: 320px;
+}
+
+.submenu ul li a {
+  font-size: 1em;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.submenu ul li a:hover {
+  background-color: rgba(111,29,69,0.1);
+}
+
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -5,18 +69,23 @@ body {
 
 /* Banner general */
 .banner {
-  background-color: whitesmoke;
+  background-color: rgb(111,29,69);
   display: flex;
   align-items: center;            /* Centrar verticalmente */
   justify-content: space-between; /* Imagen izquierda - Texto - Imagen derecha */
-  padding: 20px 40px;
-  color: rgb(111, 29, 69);
+  padding: 40px 80px;
+  color: white;
   text-align: center;
 }
 
 /* Imágenes */
-.banner-img {
+.banner-imgIZQ {
   width: 80px;
+  height: auto;
+}
+
+.banner-imgDER {
+  width: 105px;
   height: auto;
 }
 
@@ -29,7 +98,7 @@ body {
 /* Título */
 .banner-text h1 {
   margin: 0;
-  font-size: 3em;
+  font-size: 3.5em;
 }
 
 /* Subtítulo dentro del banner */
@@ -41,55 +110,76 @@ body {
  
 /* Sección de presentación */
 .presentacion {
-  padding: 30px;
+  padding: 3px 100px;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1.3em;
+  font-weight: bold;
   color: white;
-  background-color: rgb(111, 29, 69);
+  background-color: rgba(1, 37, 90, 0.555);
 }
 
-/* Sección de integrantes */
-.integrantes {
+/* Nueva sección fusionada */
+.equipo {
+  display: flex;                /* Activa el diseño en columnas */
+  justify-content: space-around; /* Espacio entre columnas */
   padding: 30px;
-  background-color: #fff;
+  background-color: white;
+  color: rgb(111,29,69);
   text-align: center;
-  color: rgb(111, 29, 69);
+  gap: 40px; /* Separación entre columnas */
 }
 
-.integrantes h2 {
+.equipo .columna {
+  flex: 1;               /* Cada columna ocupa mismo ancho */
+  max-width: 400px;      /* Para no ser demasiado anchas en pantallas grandes */
+}
+
+.equipo h2 {
   margin-bottom: 15px;
   font-size: 1.5em;
 }
 
-.integrantes ul {
+.equipo ul {
   list-style: none;   /* Quita los puntos */
   padding: 0;
 }
 
-.integrantes li {
+.equipo li {
   margin: 5px 0;
   font-size: 1.1em;
 }
 
-/* Sección de Docentes*/
-.Docentes {
-  padding: 30px;
-  background-color: #fff;
-  text-align: center;
-  color: rgb(111, 29, 69);
+/* Para pantallas pequeñas (móviles), se apilan en una sola columna */
+@media (max-width: 768px) {
+  .equipo {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
-.Docentes h2 {
-  margin-bottom: 15px;
-  font-size: 1.5em;
+/*Sección de espacio*/
+.espacio {
+  padding: 50px;
+  background-color: white;
 }
 
-.Docentes ul {
-  list-style: none;   /* Quita los puntos */
-  padding: 0;
+.Pie {
+  padding: 20px;
+  background-color: rgb(111,29,69);
+  text-align: center;  
 }
 
-.Docentes li {
-  margin: 5px 0;
-  font-size: 1.1em;
+.IPNFondo {
+  width: 250px;
+  height: auto;
+  display: inline-block;
+}
+
+/*Sección Prácticas no disponibles*/
+.ARTE {
+  width: 250px;
+  height: auto;
+  text-align: center;  
+  display: inline-block;
+  
 }
