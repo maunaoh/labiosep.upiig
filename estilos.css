@@ -1,11 +1,11 @@
-/* Barra de navegación fija */
+/* Barra de navegación fija principal*/
 .navbar {
   background-color: white;
   padding: 8px;
   text-align: center;
   position: sticky;  /* 🔹 Siempre visible */
   top: 0;           /* Se pega arriba */
-  z-index: 1000;    /* Queda por encima del contenido */
+  z-index: 2000;    /* 🔹 Más alto para que nunca lo tape nada */
 }
 
 /* Lista principal */
@@ -41,6 +41,7 @@
   padding: 10px 10px;
   margin: 0;
   box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  z-index: 2100;             /* 🔹 más alto que cualquier sección */
 }
 
 .submenu:hover ul {
@@ -61,7 +62,6 @@
   background-color: rgba(111,29,69,0.1);
 }
 
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -78,7 +78,7 @@ body {
   text-align: center;
 }
 
-/* Imágenes */
+/* Imágenes del banner*/
 .banner-imgIZQ {
   width: 80px;
   height: auto;
@@ -89,13 +89,13 @@ body {
   height: auto;
 }
 
-/* Contenedor del texto central */
+/* Contenedor del texto central del banner*/
 .banner-text {
   flex: 1;               /* Que ocupe el espacio central */
   text-align: center;
 }
 
-/* Título */
+/* Título del banner*/
 .banner-text h1 {
   margin: 0;
   font-size: 3.5em;
@@ -118,7 +118,7 @@ body {
   background-color: rgba(1, 37, 90, 0.555);
 }
 
-/* Nueva sección fusionada */
+/* Integrantes y docentes */
 .equipo {
   display: flex;                /* Activa el diseño en columnas */
   justify-content: space-around; /* Espacio entre columnas */
@@ -175,11 +175,92 @@ body {
   display: inline-block;
 }
 
-/*Sección Prácticas no disponibles*/
+/*Sección Prácticas*/
 .ARTE {
   width: 250px;
   height: auto;
   text-align: center;  
   display: inline-block;
-  
+}
+
+/* Barra de navegación de reporte 1 */
+.contenidoP1 {
+  color: rgb(111,29,69);
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+  text-align: center;
+}
+
+.submenu-practica {
+  background-color: white;
+  padding: 8px;
+  text-align: center;
+  position: sticky;  /* Siempre visible */
+  top: 0;           /* Se pega arriba */
+  z-index: 1500;    /* 🔹 más alto que secciones, pero debajo del menú principal */
+}
+
+/* Lista principal */
+.submenu-practica ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;   /* 🔹 Permite que los enlaces pasen a otra línea */
+  justify-content: center;
+  gap: 15px 30px;    /* Espaciado vertical y horizontal */
+}
+
+/* Links principales (con línea inferior) */
+.submenu-practica a {
+  color: rgb(111,29,69);
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+  border-bottom: 2px solid rgb(111,29,69); /* 🔹 línea elegante */
+  transition: border-color 0.3s ease;
+}
+
+.submenu-practica a:hover {
+  border-bottom-color: black; /* 🔹 cambia sutilmente al pasar el mouse */
+}
+
+/* Sección de ubicación */
+.ubicacion {
+  background-color: rgb(111,29,69); /* Guinda como Pie */
+  color: white;
+  padding: 40px;
+  text-align: center;
+}
+
+.ubicacion h2 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+}
+
+.mapa-direccion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;  /* Espacio entre mapa y texto */
+  flex-wrap: wrap; /* Para que en móvil se acomode en columna */
+}
+
+.map-container iframe {
+  width: 300px;   /* Ajuste más pequeño */
+  height: 200px;  /* Ajuste más pequeño */
+  border: 0;
+  border-radius: 8px; /* Bordes redondeados opcionales */
+}
+
+.direccion {
+  font-size: 1.2em;
+  line-height: 1.6em;
+  max-width: 300px;
+  text-align: left;
 }
