@@ -107,6 +107,17 @@ body {
   font-size: 1.5em;
   font-weight: bold;
 }
+
+/*Parte del separador de banner*/
+.btbanner {
+  padding: 2px;
+}
+
+/*Barra guinda de división*/
+.lineguinda {
+  padding: 2px;
+  background-color: rgb(111,29,69);
+}
  
 /* Sección de presentación */
 .presentacion {
@@ -115,7 +126,7 @@ body {
   font-size: 1.3em;
   font-weight: bold;
   color: white;
-  background-color: rgba(1, 37, 90, 0.555);
+  background-color: rgb(1, 37, 90);
 }
 
 /* Integrantes y docentes */
@@ -157,14 +168,10 @@ body {
   }
 }
 
-/*Sección de espacio*/
-.espacio {
-  padding: 50px;
-  background-color: white;
-}
+/*Sección de Pie*/
 
 .Pie {
-  padding: 20px;
+  padding: 8px;
   background-color: rgb(111,29,69);
   text-align: center;  
 }
@@ -185,7 +192,8 @@ body {
 
 /* Barra de navegación de reporte 1 */
 .contenidoP1 {
-  color: rgb(111,29,69);
+  background-color: rgb(1,37,90);
+  color: white;
   text-decoration: none;
   font-size: 1em;
   font-weight: bold;
@@ -195,7 +203,7 @@ body {
 }
 
 .submenu-practica {
-  background-color: white;
+  background-color: rgb(1,37,90);
   padding: 8px;
   text-align: center;
   position: sticky;  /* Siempre visible */
@@ -216,25 +224,25 @@ body {
 
 /* Links principales (con línea inferior) */
 .submenu-practica a {
-  color: rgb(111,29,69);
+  color: white;
   text-decoration: none;
   font-size: 1em;
   font-weight: bold;
   padding: 8px 12px;
   display: block;
-  border-bottom: 2px solid rgb(111,29,69); /* 🔹 línea elegante */
+  border-bottom: 2px solid white; /* 🔹 línea elegante */
   transition: border-color 0.3s ease;
 }
 
 .submenu-practica a:hover {
-  border-bottom-color: black; /* 🔹 cambia sutilmente al pasar el mouse */
+  border-bottom-color: rgb(111,112,114); /* 🔹 cambia sutilmente al pasar el mouse */
 }
 
 /* Sección de ubicación */
 .ubicacion {
   background-color: rgb(111,29,69); /* Guinda como Pie */
   color: white;
-  padding: 40px;
+  padding: 20px;
   text-align: center;
 }
 
@@ -263,4 +271,55 @@ body {
   line-height: 1.6em;
   max-width: 300px;
   text-align: left;
+}
+
+/* 🔹 Secciones de contenido (Resumen hasta Referencias) */
+.resumen,
+.introduccion,
+.objetivos,
+.materiales-reactivos-equipos,
+.descripcion-sistema,
+.metodologia,
+.resultados-discusion,
+.conclusiones,
+.cuestionario,
+.referencias {
+  padding: 15px 60px;
+  background-color: white;
+  color: black;
+}
+
+/* Títulos dentro de esas secciones */
+.resumen h2,
+.introduccion h2,
+.objetivos h2,
+.materiales-reactivos-equipos h2,
+.descripcion-sistema h2,
+.metodologia h2,
+.resultados-discusion h2,
+.conclusiones h2,
+.cuestionario h2,
+.referencias h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+/* Párrafos de esas secciones */
+.resumen p,
+.introduccion p,
+.objetivos p,
+.materiales-reactivos-equipos p,
+.descripcion-sistema p,
+.metodologia p,
+.resultados-discusion p,
+.conclusiones p,
+.cuestionario p,
+.referencias p {
+  text-align: justify;     /* Justificado */
+  font-size: 1em;
+  line-height: 1.6em;      /* Interlineado cómodo */
+  font-weight: normal;     /* Sin negritas */
+  margin-bottom: 15px;     /* Espacio entre párrafos */
 }
