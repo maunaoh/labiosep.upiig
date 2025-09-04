@@ -325,12 +325,21 @@ body {
 }
 
 .canva-doc {
-  text-align: center;
+  max-width: 1000px;   /* se adapta al ancho de tu contenido */
   margin: 40px auto;
-  max-width: 900px;
 }
 
-.canva-doc iframe {
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+.canva-doc h2 {
+  text-align: center;
+  font-size: 1.6em;
+  margin-bottom: 20px;
+  color: rgb(111,29,69); /* mismo tono de tu web */
+}
+
+.canva-frame {
+  width: 100%;
+  height: 700px;      /* altura ajustable */
+  border: none;       /* 🔹 quita cualquier borde */
+  border-radius: 12px; /* opcional, bordes suaves */
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15); /* opcional, como tarjeta */
 }
