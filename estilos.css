@@ -1,14 +1,13 @@
-/* Barra de navegación fija principal*/
+/* === Barra de navegación fija principal === */
 .navbar {
   background-color: white;
   padding: 8px;
   text-align: center;
-  position: sticky;  /* 🔹 Siempre visible */
-  top: 0;           /* Se pega arriba */
-  z-index: 2000;    /* 🔹 Más alto para que nunca lo tape nada */
+  position: sticky;
+  top: 0;
+  z-index: 2000;
 }
 
-/* Lista principal */
 .navbar ul {
   list-style: none;
   margin: 0;
@@ -18,7 +17,6 @@
   gap: 30px;
 }
 
-/* Links principales */
 .navbar a {
   color: rgb(111,29,69);
   text-decoration: none;
@@ -34,18 +32,18 @@
 
 /* --- Submenú --- */
 .submenu ul {
-  display: none;             /* Oculto por defecto */
-  position: absolute;        /* Desplegable */
+  display: none;
+  position: absolute;
   background-color: white;
   list-style: none;
   padding: 10px 10px;
   margin: 0;
   box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-  z-index: 2100;             /* 🔹 más alto que cualquier sección */
+  z-index: 2100;
 }
 
 .submenu:hover ul {
-  display: block;            /* Se muestra al pasar el mouse */
+  display: block;
 }
 
 .submenu ul li {
@@ -62,64 +60,35 @@
   background-color: rgba(111,29,69,0.1);
 }
 
+/* === Generales === */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
-/* Banner general */
+/* === Banner === */
 .banner {
   background-color: rgb(111,29,69);
   display: flex;
-  align-items: center;            /* Centrar verticalmente */
-  justify-content: space-between; /* Imagen izquierda - Texto - Imagen derecha */
+  align-items: center;
+  justify-content: space-between;
   padding: 40px 80px;
   color: white;
   text-align: center;
 }
 
-/* Imágenes del banner*/
-.banner-imgIZQ {
-  width: 80px;
-  height: auto;
-}
+.banner-imgIZQ { width: 80px; height: auto; }
+.banner-imgDER { width: 105px; height: auto; }
 
-.banner-imgDER {
-  width: 105px;
-  height: auto;
-}
+.banner-text { flex: 1; text-align: center; }
+.banner-text h1 { margin: 0; font-size: 3.5em; }
+.banner-text .subtitulo { margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; }
 
-/* Contenedor del texto central del banner*/
-.banner-text {
-  flex: 1;               /* Que ocupe el espacio central */
-  text-align: center;
-}
+/* Separador */
+.btbanner { padding: 2px; }
+.lineguinda { padding: 2px; background-color: rgb(111,29,69); }
 
-/* Título del banner*/
-.banner-text h1 {
-  margin: 0;
-  font-size: 3.5em;
-}
-
-/* Subtítulo dentro del banner */
-.banner-text .subtitulo {
-  margin: 5px 0 0 0;
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
-/*Parte del separador de banner*/
-.btbanner {
-  padding: 2px;
-}
-
-/*Barra guinda de división*/
-.lineguinda {
-  padding: 2px;
-  background-color: rgb(111,29,69);
-}
- 
-/* Sección de presentación */
+/* === Sección de presentación === */
 .presentacion {
   padding: 3px 100px;
   text-align: center;
@@ -129,100 +98,47 @@ body {
   background-color: rgb(1, 37, 90);
 }
 
-/* Integrantes y docentes */
+/* === Integrantes y docentes === */
 .equipo {
-  display: flex;                /* Activa el diseño en columnas */
-  justify-content: space-around; /* Espacio entre columnas */
+  display: flex;
+  justify-content: space-around;
   padding: 30px;
   background-color: white;
   color: rgb(111,29,69);
   text-align: center;
-  gap: 40px; /* Separación entre columnas */
+  gap: 40px;
 }
+.equipo .columna { flex: 1; max-width: 400px; }
+.equipo h2 { margin-bottom: 15px; font-size: 1.5em; }
+.equipo ul { list-style: none; padding: 0; }
+.equipo li { margin: 5px 0; font-size: 1.1em; }
 
-.equipo .columna {
-  flex: 1;               /* Cada columna ocupa mismo ancho */
-  max-width: 400px;      /* Para no ser demasiado anchas en pantallas grandes */
-}
-
-.equipo h2 {
-  margin-bottom: 15px;
-  font-size: 1.5em;
-}
-
-.equipo ul {
-  list-style: none;   /* Quita los puntos */
-  padding: 0;
-}
-
-.equipo li {
-  margin: 5px 0;
-  font-size: 1.1em;
-}
-
-/* Para pantallas pequeñas (móviles), se apilan en una sola columna */
-@media (max-width: 768px) {
-  .equipo {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-/*Sección de Pie*/
-
+/* === Pie de página === */
 .Pie {
   padding: 8px;
   background-color: rgb(111,29,69);
-  text-align: center;  
-}
-
-.IPNFondo {
-  width: 250px;
-  height: auto;
-  display: inline-block;
-}
-
-/*Sección Prácticas*/
-.ARTE {
-  width: 250px;
-  height: auto;
-  text-align: center;  
-  display: inline-block;
-}
-
-/* Barra de navegación de reporte 1 */
-.contenidoP1 {
-  background-color: rgb(1,37,90);
-  color: white;
-  text-decoration: none;
-  font-size: 1em;
-  font-weight: bold;
-  padding: 8px 12px;
-  display: block;
   text-align: center;
 }
+.IPNFondo { width: 250px; height: auto; display: inline-block; }
 
+/* === Submenú dentro de prácticas === */
 .submenu-practica {
   background-color: rgb(1,37,90);
   padding: 8px;
   text-align: center;
-  position: sticky;  /* Siempre visible */
-  top: 0;           /* Se pega arriba */
-  z-index: 1500;    /* 🔹 más alto que secciones, pero debajo del menú principal */
+  position: sticky;
+  top: 0;
+  z-index: 1500;
 }
-
-/* Lista principal */
 .submenu-practica ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;   /* 🔹 Permite que los enlaces pasen a otra línea */
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 15px 30px;    /* Espaciado vertical y horizontal */
+  gap: 15px 30px;
 }
-
-/* Links principales (con línea inferior) */
 .submenu-practica a {
   color: white;
   text-decoration: none;
@@ -230,42 +146,32 @@ body {
   font-weight: bold;
   padding: 8px 12px;
   display: block;
-  border-bottom: 2px solid white; /* 🔹 línea elegante */
+  border-bottom: 2px solid white;
   transition: border-color 0.3s ease;
 }
+.submenu-practica a:hover { border-bottom-color: rgb(111,112,114); }
 
-.submenu-practica a:hover {
-  border-bottom-color: rgb(111,112,114); /* 🔹 cambia sutilmente al pasar el mouse */
-}
-
-/* Sección de ubicación */
+/* === Sección de ubicación === */
 .ubicacion {
-  background-color: rgb(111,29,69); /* Guinda como Pie */
+  background-color: rgb(111,29,69);
   color: white;
   padding: 20px;
   text-align: center;
 }
-
-.ubicacion h2 {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-}
-
+.ubicacion h2 { margin-bottom: 20px; font-size: 1.8em; }
 .mapa-direccion {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;  /* Espacio entre mapa y texto */
-  flex-wrap: wrap; /* Para que en móvil se acomode en columna */
+  gap: 30px;
+  flex-wrap: wrap;
 }
-
 .map-container iframe {
-  width: 300px;   /* Ajuste más pequeño */
-  height: 200px;  /* Ajuste más pequeño */
+  width: 300px;
+  height: 200px;
   border: 0;
-  border-radius: 8px; /* Bordes redondeados opcionales */
+  border-radius: 8px;
 }
-
 .direccion {
   font-size: 1.2em;
   line-height: 1.6em;
@@ -273,73 +179,108 @@ body {
   text-align: left;
 }
 
-/* 🔹 Secciones de contenido (Resumen hasta Referencias) */
-.resumen,
-.introduccion,
-.objetivos,
-.materiales-reactivos-equipos,
-.descripcion-sistema,
-.metodologia,
-.resultados-discusion,
-.conclusiones,
-.cuestionario,
-.referencias {
+/* === Secciones de contenido === */
+.resumen, .introduccion, .objetivos,
+.materiales-reactivos-equipos, .descripcion-sistema,
+.metodologia, .resultados-discusion,
+.conclusiones, .cuestionario, .referencias {
   padding: 15px 60px;
   background-color: white;
   color: black;
 }
-
-/* Títulos dentro de esas secciones */
-.resumen h2,
-.introduccion h2,
-.objetivos h2,
-.materiales-reactivos-equipos h2,
-.descripcion-sistema h2,
-.metodologia h2,
-.resultados-discusion h2,
-.conclusiones h2,
-.cuestionario h2,
-.referencias h2 {
+.resumen h2, .introduccion h2, .objetivos h2,
+.materiales-reactivos-equipos h2, .descripcion-sistema h2,
+.metodologia h2, .resultados-discusion h2,
+.conclusiones h2, .cuestionario h2, .referencias h2 {
   text-align: center;
   font-weight: bold;
   font-size: 1.8em;
   margin-bottom: 20px;
 }
-
-/* Párrafos de esas secciones */
-.resumen p,
-.introduccion p,
-.objetivos p,
-.materiales-reactivos-equipos p,
-.descripcion-sistema p,
-.metodologia p,
-.resultados-discusion p,
-.conclusiones p,
-.cuestionario p,
-.referencias p {
-  text-align: justify;     /* Justificado */
+.resumen p, .introduccion p, .objetivos p,
+.materiales-reactivos-equipos p, .descripcion-sistema p,
+.metodologia p, .resultados-discusion p,
+.conclusiones p, .cuestionario p, .referencias p {
+  text-align: justify;
   font-size: 1em;
-  line-height: 1.6em;      /* Interlineado cómodo */
-  font-weight: normal;     /* Sin negritas */
-  margin-bottom: 15px;     /* Espacio entre párrafos */
+  line-height: 1.6em;
+  margin-bottom: 15px;
 }
 
+/* === Canva embebido === */
 .canva-doc {
-  max-width: 1000px;   /* se adapta al ancho de tu contenido */
+  max-width: 1000px;
   margin: 40px auto;
-}
-
-.canva-doc h2 {
   text-align: center;
-  font-size: 1.6em;
-  margin-bottom: 20px;
-  color: rgb(111,29,69); /* mismo tono de tu web */
+}
+.canva-container {
+  position: relative;
+  width: 100%;
+  padding-top: 141.4%; /* relación de aspecto estándar */
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+.canva-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.canva-leyenda {
+  margin-top: 15px;
+  font-size: 1em;
+  font-weight: bold;
+  color: rgb(111,29,69);
+  text-align: center;
 }
 
-.canva-frame {
-  width: 100%;
-  height: 700px;      /* altura ajustable */
-  border: none;       /* 🔹 quita cualquier borde */
-  border-radius: 12px; /* opcional, bordes suaves */
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.15); /* opcional, como tarjeta */
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .banner {
+    flex-wrap: wrap;
+    padding: 20px;
+    text-align: center;
+  }
+  .banner-imgIZQ, .banner-imgDER {
+    width: 50px;
+    max-width: 20%;
+  }
+  .banner-text h1 { font-size: 2em; }
+  .banner-text .subtitulo { font-size: 1em; }
+
+  .navbar ul { flex-direction: column; gap: 12px; }
+  .submenu ul li { width: 100%; }
+
+  .resumen, .introduccion, .objetivos,
+  .materiales-reactivos-equipos, .descripcion-sistema,
+  .metodologia, .resultados-discusion,
+  .conclusiones, .cuestionario, .referencias {
+    padding: 15px 20px;
+  }
+
+  .equipo { flex-direction: column; gap: 20px; }
+
+  .map-container iframe {
+    width: 100%;
+    height: 250px;
+  }
+  .direccion { text-align: center; margin-top: 15px; }
+
+  .canva-container { padding-top: 180%; }
+  .canva-leyenda { font-size: 0.9em; padding: 0 10px; }
+}
+
+@media (max-width: 480px) {
+  .banner-text h1 { font-size: 1.5em; }
+  .banner-text .subtitulo { font-size: 0.9em; }
+  .equipo h2 { font-size: 1.2em; }
+  .submenu-practica a {
+    font-size: 0.9em;
+    padding: 5px 8px;
+  }
+  .canva-container { padding-top: 200%; }
+  .canva-leyenda { font-size: 0.85em; }
 }
