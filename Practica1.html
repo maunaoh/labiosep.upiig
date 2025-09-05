@@ -65,11 +65,40 @@
   <p class="canva-leyenda">
     Silao de la Victoria, Gto., a viernes 5 de septiembre del 2025
   </p>
+  <!-- Botón de descarga -->
+<div class="boton-descarga">
+  <a href="Póster de Práctica 1_EQ5_LBios_6BM1.pdf" download="Poster_Practica1.pdf">📥 Descargar póster en PDF</a>
+</div>
 </section>
 </section>
 <section class="Pie">
   <img src="LogoIPNBlancoH.png" alt="" class="IPNFondo">
 </section>
+
+<!-- 🔹 Script para controlar scroll en móviles -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const canvaFrame = document.getElementById("canvaFrame");
+
+  // Solo aplicar en pantallas chicas (ej: móviles)
+  if (window.innerWidth <= 768) {
+    canvaFrame.style.pointerEvents = "none"; // No atrapa el dedo al inicio
+
+    // Cuando tocas el iframe → se activa
+    canvaFrame.addEventListener("touchstart", function() {
+      canvaFrame.style.pointerEvents = "auto";
+    });
+
+    // Cuando tocas en cualquier otro lugar → se bloquea de nuevo
+    document.addEventListener("touchstart", function(e) {
+      if (!canvaFrame.contains(e.target)) {
+        canvaFrame.style.pointerEvents = "none";
+      }
+    });
+  }
+});
+</script>
+
 </body>
 </html>
 
