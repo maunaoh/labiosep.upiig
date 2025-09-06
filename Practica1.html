@@ -8,8 +8,13 @@
 </head>
 <body>
 <!-- Menú de navegación -->
- <nav class="navbar">
-  <ul>
+<!-- Menú de navegación -->
+<nav class="navbar">
+  <!-- Botón hamburguesa (solo visible en móviles) -->
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+
+  <!-- Lista de enlaces -->
+  <ul id="menu">
     <li><a href="index.html">Página Principal</a></li>
 
     <!-- Reportes con submenú -->
@@ -33,6 +38,7 @@
     <li><a href="Teoría.html">Teoría</a></li>
   </ul>
 </nav>
+
 <section>
        <!--Banner-->
     <header class="banner">
@@ -65,6 +71,7 @@
   <p class="canva-leyenda">
     Silao de la Victoria, Gto., a viernes 5 de septiembre del 2025
   </p>
+
   <!-- Botón de descarga -->
 <div class="boton-descarga">
   <a href="Póster de Práctica 1_EQ5_LBios_6BM1.pdf" download="Poster_Practica1.pdf">📥 Descargar póster en PDF</a>
@@ -97,6 +104,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 });
+</script>
+<script>
+  // Toggle del menú hamburguesa
+  document.getElementById("menu-toggle").addEventListener("click", function() {
+    document.getElementById("menu").classList.toggle("show");
+  });
 </script>
 
 </body>

@@ -351,4 +351,77 @@ body {
   }
 }
 
+/* Wrapper del Canva y capa para móviles */
+.canva-wrapper {
+  position: relative;
+}
 
+/* La capa está oculta por defecto (PC) */
+.canva-shield {
+  position: absolute;
+  inset: 0;              /* top:0; right:0; bottom:0; left:0 */
+  display: none;
+  z-index: 5;            /* por encima del iframe */
+}
+
+/* Botón flotante para habilitar interacción */
+.canva-unlock {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background-color: rgb(1, 37, 90);
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+  cursor: pointer;
+}
+
+/* === Botón hamburguesa === */
+.menu-toggle {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: rgb(111,29,69);
+  background: none;
+  border: none;
+  padding: 8px 16px;
+}
+
+/* --- Vista móvil --- */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;   /* visible en móviles */
+  }
+
+  .navbar ul {
+    display: none;    /* oculto por defecto */
+    flex-direction: column;
+    background-color: white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid rgb(111,29,69);
+  }
+
+  .navbar ul.show {
+    display: flex; /* se muestra cuando el usuario toca ☰ */
+  }
+
+  .navbar ul li {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .submenu ul {
+    position: static;   /* submenu se adapta en móviles */
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .submenu ul li {
+    width: 100%;
+  }
+}
