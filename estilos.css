@@ -213,28 +213,106 @@ body {
   margin: 40px auto;
   text-align: center;
 }
-.canva-container {
+
+.canva-embed-container {
   position: relative;
   width: 100%;
-  padding-top: 141.4%; /* relación de aspecto estándar */
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  height: 0;
+  padding-top: 1223.6457%;
+  padding-bottom: 0;
+  box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);
+  margin-top: 1.6em;
+  margin-bottom: 0.9em;
   overflow: hidden;
+  border-radius: 8px;
+  will-change: transform;
 }
-.canva-frame {
+
+.canva-embed-container iframe {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   border: none;
+  padding: 0;
+  margin: 0;
 }
+
 .canva-leyenda {
   margin-top: 15px;
   font-size: 1em;
   font-weight: bold;
   color: rgb(111,29,69);
   text-align: center;
+}
+
+/* === Botón de descarga === */
+.boton-descarga {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.boton-descarga a {
+  background-color: rgb(1, 37, 90);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.boton-descarga a:hover {
+  background-color: rgb(0, 28, 70);
+  transform: scale(1.05);
+}
+
+.boton-descarga a:active {
+  transform: scale(0.97);
+}
+
+/* === Mejoras para móviles - Canva === */
+.canva-mobile-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.canva-mobile-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: none;
+}
+
+.canva-scroll-message {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(1, 37, 90, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 15;
+  display: none;
+}
+
+/* Animación para el mensaje */
+@keyframes pulse-message {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
 }
 
 /* === RESPONSIVE === */
@@ -269,8 +347,22 @@ body {
   }
   .direccion { text-align: center; margin-top: 15px; }
 
-  .canva-container { padding-top: 180%; }
   .canva-leyenda { font-size: 0.9em; padding: 0 10px; }
+  
+  /* Mostrar overlay y mensaje en móviles */
+  .canva-mobile-overlay {
+    display: block;
+  }
+  
+  .canva-scroll-message {
+    display: block;
+    animation: pulse-message 2s infinite;
+  }
+  
+  /* Ajustar el iframe para móviles */
+  .canva-embed-container iframe {
+    pointer-events: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -281,122 +373,17 @@ body {
     font-size: 0.9em;
     padding: 5px 8px;
   }
-  .canva-container { padding-top: 200%; }
-  .canva-leyenda { font-size: 0.85em; }
-}
-
-/* Contenedor del Canva */
-.canva-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 1000px; /* límite en pantallas grandes */
-  margin: 40px auto;
-  aspect-ratio: 3 / 4; /* mantiene proporción como póster */
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
-}
-
-.canva-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Leyenda debajo del Canva */
-.leyenda-canva {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 1em;
-  color: rgb(111,29,69); /* Guinda */
-  font-weight: bold;
-}
-
-/* Botón de descarga */
-.boton-descarga {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.boton-descarga a {
-  background-color: rgb(1, 37, 90); /* Azul usado en la web */
-  color: white;
-  padding: 12px 24px;
-  text-decoration: none;
-  font-size: 1.1em;
-  font-weight: bold;
-  border-radius: 12px;  /* Esquinas redondeadas */
-  box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.boton-descarga a:hover {
-  background-color: rgb(0, 28, 70); /* Azul más oscuro al pasar el mouse */
-  transform: scale(1.05); /* Pequeño zoom */
-}
-
-.boton-descarga a:active {
-  transform: scale(0.97); /* Se hunde un poco al dar clic */
-}
-
-/* Ajuste para móviles */
-@media (max-width: 480px) {
+  
   .boton-descarga a {
     font-size: 1em;
     padding: 10px 18px;
   }
-}
-
-/* Wrapper del Canva y capa para móviles */
-.canva-wrapper {
-  position: relative;
-}
-
-/* La capa está oculta por defecto (PC) */
-.canva-shield {
-  position: absolute;
-  inset: 0;              /* top:0; right:0; bottom:0; left:0 */
-  display: none;
-  z-index: 5;            /* por encima del iframe */
-}
-
-/* Botón flotante para habilitar interacción */
-.canva-unlock {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  background-color: rgb(1, 37, 90);
-  color: #fff;
-  border: 0;
-  padding: 10px 14px;
-  border-radius: 9999px;
-  font-weight: 600;
-  box-shadow: 0 4px 10px rgba(0,0,0,.2);
-  cursor: pointer;
-}
-
-/* --- Ajuste del scroll en móviles para Canva --- */
-@media (max-width: 768px) {
-  .canva-wrapper {
-    overflow-y: auto;    /* permite scroll vertical dentro */
-    -webkit-overflow-scrolling: touch; /* scroll fluido en iOS */
-    max-height: 80vh;    /* no ocupa todo, deja espacio para scroll */
-  }
-
-  .canva-wrapper iframe {
-    pointer-events: none; /* el iframe no atrapa el dedo de inicio */
-  }
-
-  /* Botón flotante para habilitar interacción si lo quieres */
-  .canva-unlock {
-    display: block;
+  
+  .canva-scroll-message {
+    font-size: 12px;
+    padding: 8px 12px;
   }
 }
-
 
 /* === Botón hamburguesa === */
 .menu-toggle {
@@ -412,11 +399,11 @@ body {
 /* --- Vista móvil --- */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block;   /* visible en móviles */
+    display: block;
   }
 
   .navbar ul {
-    display: none;    /* oculto por defecto */
+    display: none;
     flex-direction: column;
     background-color: white;
     width: 100%;
@@ -426,7 +413,7 @@ body {
   }
 
   .navbar ul.show {
-    display: flex; /* se muestra cuando el usuario toca ☰ */
+    display: flex;
   }
 
   .navbar ul li {
@@ -435,7 +422,7 @@ body {
   }
 
   .submenu ul {
-    position: static;   /* submenu se adapta en móviles */
+    position: static;
     box-shadow: none;
     padding: 0;
   }
