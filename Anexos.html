@@ -8,8 +8,12 @@
 </head>
 <body>
   <!-- Menú de navegación -->
- <nav class="navbar">
-  <ul>
+<nav class="navbar">
+  <!-- Botón hamburguesa (solo visible en móviles) -->
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+
+  <!-- Lista de enlaces -->
+  <ul id="menu">
     <li><a href="index.html">Página Principal</a></li>
 
     <!-- Reportes con submenú -->
@@ -51,5 +55,11 @@
 <section class="Pie">
   <img src="LogoIPNBlancoH.png" alt="" class="IPNFondo">
 </section>
+<script>
+  // Toggle del menú hamburguesa
+  document.getElementById("menu-toggle").addEventListener("click", function() {
+    document.getElementById("menu").classList.toggle("show");
+  });
+</script>
 </body>
 </html>
