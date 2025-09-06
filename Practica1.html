@@ -8,7 +8,6 @@
 </head>
 <body>
 <!-- Menú de navegación -->
-<!-- Menú de navegación -->
 <nav class="navbar">
   <!-- Botón hamburguesa (solo visible en móviles) -->
   <div class="menu-toggle" id="menu-toggle">☰</div>
@@ -85,18 +84,17 @@
 <!-- 🔹 Script para controlar scroll en móviles -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const canvaFrame = document.getElementById("canvaFrame");
+  const canvaFrame = document.querySelector(".canva-wrapper iframe");
 
-  // Solo aplicar en pantallas chicas (ej: móviles)
   if (window.innerWidth <= 768) {
-    canvaFrame.style.pointerEvents = "none"; // No atrapa el dedo al inicio
+    canvaFrame.style.pointerEvents = "none";
 
-    // Cuando tocas el iframe → se activa
+    // tocar el iframe → lo activa
     canvaFrame.addEventListener("touchstart", function() {
       canvaFrame.style.pointerEvents = "auto";
     });
 
-    // Cuando tocas en cualquier otro lugar → se bloquea de nuevo
+    // tocar fuera → se desactiva
     document.addEventListener("touchstart", function(e) {
       if (!canvaFrame.contains(e.target)) {
         canvaFrame.style.pointerEvents = "none";
@@ -105,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
+
 <script>
   // Toggle del menú hamburguesa
   document.getElementById("menu-toggle").addEventListener("click", function() {

@@ -379,6 +379,25 @@ body {
   cursor: pointer;
 }
 
+/* --- Ajuste del scroll en móviles para Canva --- */
+@media (max-width: 768px) {
+  .canva-wrapper {
+    overflow-y: auto;    /* permite scroll vertical dentro */
+    -webkit-overflow-scrolling: touch; /* scroll fluido en iOS */
+    max-height: 80vh;    /* no ocupa todo, deja espacio para scroll */
+  }
+
+  .canva-wrapper iframe {
+    pointer-events: none; /* el iframe no atrapa el dedo de inicio */
+  }
+
+  /* Botón flotante para habilitar interacción si lo quieres */
+  .canva-unlock {
+    display: block;
+  }
+}
+
+
 /* === Botón hamburguesa === */
 .menu-toggle {
   display: none;
