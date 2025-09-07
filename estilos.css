@@ -315,6 +315,12 @@ body {
   100% { opacity: 0.7; }
 }
 
+/* === Estilos para ecuaciones MathJax === */
+.mjx-chtml {
+  font-size: 1.1em !important;
+  padding: 0 2px;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
   .banner {
@@ -362,6 +368,11 @@ body {
   /* Ajustar el iframe para móviles */
   .canva-embed-container iframe {
     pointer-events: none;
+  }
+  
+  /* Ajustar tamaño de ecuaciones en móviles */
+  .mjx-chtml {
+    font-size: 1em !important;
   }
 }
 
@@ -429,5 +440,169 @@ body {
 
   .submenu ul li {
     width: 100%;
+  }
+}
+
+/* Caja flotante para figuras con pie del tipo 1*/
+.figura-flotante-type1 {
+  float: left;              /* Imagen + pie flotan a la izquierda*/
+  width: 180px;              /* Ajusta según necesites */
+  margin: 5px 20px 10px 0px;     /* Separación con texto: arriba, derecha, abajo, izquierda */
+  text-align: center;        /* Centra el pie */
+}
+
+.figura-flotante img {
+  max-width: 100%;           /* Para que la imagen no se salga */
+  height: auto;
+  border-radius: 6px;        /* Opcional, bordes suaves */
+}
+
+.piefig {
+  color: black;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+/* Figura centrada entre párrafos (type 1) */
+.figura-type1 {
+  text-align: center;     /* Centra el contenido */
+  margin: 20px auto;      /* Espacio arriba y abajo */
+  max-width: 580px;       /* Control del ancho total */
+}
+
+.figura-type1 img {
+  width: 100%;            /* Se ajusta al ancho de la caja */
+  height: auto;           /* Mantiene proporción */
+  border-radius: 6px;     /* Opcional: bordes suaves */
+}
+
+.pie-imagen {
+  font-size: 0.85em;      /* Más pequeño que párrafo */
+  color: black;
+  margin-top: 5px;
+  text-align: center;
+}
+
+
+
+
+/* === Responsive para disposición imagen-texto === */
+@media (max-width: 768px) {
+  .imagen-contenedor {
+    flex-direction: column;
+  }
+  
+  .imagen-y-pie {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .texto-derecha {
+    width: 100%;
+  }
+}
+  @media (max-width: 768px) {
+  .ecuaciones-dos-columnas {
+    grid-template-columns: 1fr; /* 🔹 se apilan en móviles */
+  }
+}
+
+
+/* === Estilos para lista de definiciones === */
+.lista-definiciones {
+  margin: 15px 0;
+  padding-left: 25px;
+  list-style-type: disc;
+}
+
+.lista-definiciones li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.variable {
+  font-family: "Times New Roman", serif;
+  font-style: italic;
+  font-weight: bold;
+  color: black;
+}
+
+/* Para subíndices en variables */
+sub {
+  font-size: 0.8em;
+  vertical-align: sub;
+}
+
+/* === Estilos para tablas === */
+.tabla-container {
+  margin: 25px 0;
+  overflow-x: auto;
+}
+
+.tabla-materiales {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #6f1d45;
+  margin: 20px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.tabla-materiales th {
+  background-color: #6f1d45;
+  color: white;
+  padding: 15px 12px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  border: 1px solid #5a1640;
+}
+
+.tabla-materiales td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.tabla-materiales tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla-materiales tr:nth-child(odd) {
+  background-color: white;
+}
+
+.tabla-materiales tr:hover {
+  background-color: #f0e6ed;
+  transition: background-color 0.3s ease;
+}
+
+/* Responsive para tablas */
+@media (max-width: 768px) {
+  .tabla-materiales {
+    font-size: 0.9em;
+  }
+  
+  .tabla-materiales th,
+  .tabla-materiales td {
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabla-materiales {
+    font-size: 0.85em;
+  }
+  
+  .tabla-materiales th {
+    font-size: 1em;
+    padding: 8px 6px;
+  }
+  
+  .tabla-materiales td {
+    padding: 8px 6px;
   }
 }

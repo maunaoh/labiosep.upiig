@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
     <title>Práctica 2: Sedimentación</title>
+    
+    <!-- Configuración de MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 <!-- Menú de navegación -->
@@ -53,8 +68,8 @@
   
 </section> 
 <section class="contenidoP1">
-    <h3>Contenidos del reporte</h3>
     <nav class="submenu-practica">
+      <h3 style="color: white;">Contenidos del reporte</h3>
   <ul>
     <li><a href="#resumen">Resumen</a></li>
     <li><a href="#introduccion">Introducción</a></li>
@@ -72,35 +87,121 @@
 
 <section class="resumen" id="resumen">
   <h2>Resumen</h2>
-  <p>SE AGREGARÁ TRAS REALIZADA LA PRÁCTICA</p>
+  <p>
+    La sedimentación es una operación unitaria de alta utilidad tanto en la industria como la investigación, en esta práctica nos centramos en la sedimentación libre (por acción de la gravedad), 
+    específicamente en estudiar su comportamiento cuando se da un efecto de pared en el sistema de estudio. La práctica constó de soltar cerca o en la superficie del fluido de medio tres diferentes 
+    tipos de canicas o balines que fungieron como partículas de geometría esférica, cada tipo con una densidad y diámetro de partícula diferente, en tres tipos de fluidos con características distintas 
+    (glicerina, aceite de cocina y shampoo), se tomó la distancia y el tiempo de sedimentación hasta un punto de referencia (dependiendo del experimento), cada experimento se realizó por triplicado,
+     con el fin de obtener una velocidad de sedimentación experimental que se comparó con la teórica.
+  </p>
   <section class="lineguinda">
 
   </section>
 </section>
 
 <section class="introduccion" id="introduccion">
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
   <h2>Introducción</h2>
-  <p>
-    La sedimentación es un proceso de separación mecánica en el que las partículas o macromoléculas se mueven dentro de un campo inercial y se separan de un fluido debido a las fuerzas gravitacionales o centrífugas que actúan sobre ellas (Harrison <i>et al.</i>, 2015).
-  </p>
-  <p>
-    La sedimentación implica varios principios y mecanismos que entran en juego, una es la diferencia de densidad, cuanto mayor es la diferencia, más fácil se da la separación, el tamaño de partícula, a mayor diámetro, mayor velocidad, viscosidad del medio, cuando la viscosidad disminuye, aumenta la velocidad de sedimentación,  también actúan varias fuerzas cuando se da la sedimentación, siendo la fuerza de gravedad, de flotación o boyante, y la de arrastre (Tejeda Mansir <i>et al.</i>, 2011).
-  </p>
-  <p>
-    La Ley de Stokes establece que cuando se aplica una fuerza a una partícula en un medio continuo esta se acelera \(F=ma\), hasta que alcanza una velocidad a la cual la resistencia a su movimiento iguala a la fuerza aplicada. En una sedimentación libre la fuerza que actúa sobre la partícula es la de la gravedad, mientras que en una sedimentación centrífuga la fuerza es la del campo centrífugo (Tejeda Mansir <i>et al.</i>, 2011).
-  </p>
-  <p>
-    Las fuerzas que se oponen al movimiento de las partículas pueden agruparse en la fuerza de flotación descrita por el principio de Arquímides y la fuerza de arrastre (resistencia de forma y de fricción) descrita por la Ley de Stokes. De acuerdo a lo anterior, el balance de fuerzas para una partícula en equilibrio en un medio continuo se expresa como en la figura 1.
-  </p>
-  <img src="Figura 1_P1.png" alt="" class="PredeterminadoFIG"> 
-  <p>
-    Figura 1. Diagrama de cuerpo libre de una partícula que se está sedimentando
-  </p>
+<p>
+  La sedimentación es un proceso de separación mecánica en el que las partículas o macromoléculas
+   se mueven dentro de un campo inercial y se separan de un fluido debido a las fuerzas gravitacionales o centrífugas que actúan sobre ellas (Harrison <i>et al.</i>, 2015).
+</p>
+<p>
+  La sedimentación implica varios principios y mecanismos que entran en juego, una es la diferencia de densidad, 
+  cuanto mayor es la diferencia, más fácil se da la separación, el tamaño de partícula, a mayor diámetro, mayor velocidad, viscosidad del medio,
+   cuando la viscosidad disminuye, aumenta la velocidad de sedimentación,  también actúan varias fuerzas cuando se da la sedimentación,
+    siendo la fuerza de gravedad, de flotación o boyante, y la de arrastre (Tejeda Mansir <i>et al.</i>, 2011).
+</p>
+<p>
+  La Ley de Stokes establece que cuando se aplica una fuerza a una partícula en un medio continuo esta se acelera $(F = m \cdot a)$,
+   hasta que alcanza una velocidad a la cual la resistencia a su movimiento iguala a la fuerza aplicada. En una sedimentación libre
+    la fuerza que actúa sobre la partícula es la de la gravedad, mientras que en una sedimentación centrífuga la fuerza es la del campo centrífugo 
+    (Tejeda Mansir <i>et al.</i>, 2011).
+</p>
+<div class="figura-flotante-type1">
+  <img src="P2_Figura1.png" alt="Diagrama de cuerpo libre" style="width:100%;">
+  <p class="piefig" style="text-align: center; font-size: 0.8em"><b>Figura 1.</b> Diagrama de cuerpo libre de una partícula que se está sedimentando.</p>
+</div>
+
+    <p>Las expresiones que rigen a estas fuerzas son las siguientes:</p>
+      \[F_g = m \cdot g = w\]
+    <p style="text-align: center; font-size: 0.8em"><b>Ecuación 1.</b> Fuerza debida a la gravedad</p>
+      \[F_b = \frac{m \rho g}{\rho_p} = V_p \rho g\]
+    <p style="text-align: center; font-size: 0.8em"><b>Ecuación 2.</b> Fuerza de flotación.</p>
+      \[F_D = C_D \rho \frac{v^2}{2} A\]
+    <p style="text-align: center; font-size: 0.8em"><b>Ecuación 3.</b> Fuerza de arrastre.</p>
+    <p style="margin-top: 140px;">
+     donde:
+    </p>
+
+    <ul class="lista-definiciones">
+      <li><span class="variable">C<sub>D</sub></span> es el coeficiente de arrastre.</li>
+      <li><span class="variable">A</span> es el área proyectada de la partícula sobre el plano perpendicular al movimiento del fluido.</li>
+      <li><span class="variable">ρ</span> es la densidad del fluido.</li>
+      <li><span class="variable">v</span> es la velocidad de movimiento de la partícula.</li>
+      <li><span class="variable">m</span> es la masa de la partícula.</li>
+      <li><span class="variable">g</span> es la constante de gravedad.</li>
+      <li><span class="variable">w</span> es el peso de la partícula, equivalente a la fuerza debida a la gravedad.</li>
+      <li><span class="variable">ρ<sub>P</sub></span> es la densidad de la partícula.</li>
+      <li><span class="variable">V<sub>P</sub></span> es el volumen de la partícula.</li>
+    </ul>
+<p>
+  El coeficiente de arrastre depende de la forma del cuerpo y del número de Reynolds. Para partículas esféricas rígidas en el intervalo de la Ley de Stokes $(Re &lt 1)$, el coeficiente de arrastre es:
+</p>
+<p>
+  $$C_D = \frac{24}{\frac{D_Pv_t\rho}{\mu}} = \frac{24}{Re}$$
+</p>
+<p style="text-align: center; font-size: 0.8em">
+<b>Ecuación 4.</b> Coeficiente de arrastre para partículas esféricas rígidas en el intervalo de la Ley de Stokes (Geankoplis, 2006).
+</p>
+<p>
+  En la región turbulenta de la Ley de Newton $(1000 &lt Re &lt 2 &times 10^5)$, el coeficiente de arrastre suele tener un valor constante de 0.44. Entre 1 y 1000, se suele utilizar el gráfico de la figura 2. (Geankoplis, 2006)
+</p>
+
+<div class="figura-type1">
+  <img src="P2_Figura2.png" alt="Diagrama de cuerpo libre" style="width:100%;">
+  <p class="piefig" style="text-align: center; font-size: 0.8em"><b>Figura 2.</b> Coeficiente de resistencia (o arrastre) al flujo para una esfera rígida.</p>
+</div>
+<p>
+  También se tiene conocimiento de sedimentación bajo otras condiciones, como la frenada, y con efecto de pared:
+</p>
+<p>
+  <b>Sedimentación frenada:</b> se presenta cuando las partículas están muy juntas, interfiriendo con el movimiento de las otras y asentándose a una velocidad menor. La densidad de la fase fluida se transforma en la densidad global de la suspensión, y la viscosidad de la suspensión es mucho mayor debido a la interferencia y el aumento del arrastre de forma. (Geankoplis, 2006)
+</p>
+<p>
+  <b>Sedimentación con efecto de pared:</b> el efecto de pared ocurre cuando el diámetro de la partícula $(D_P)$ es apreciable con respecto al diámetro del recipiente $(D_w)$ en el que se produce la sedimentación, lo que retarda el movimiento de la partícula impactando en su velocidad terminal de sedimentación $(v_t )$. (Geankoplis, 2006)
+</p>
+<p>
+  En el caso de una precipitación en el intervalo de la Ley de Stokes, la velocidad terminal calculada se puede multiplicar por alguna de las siguientes expresiones de corrección para el efecto de pared:
+</p>
+<div class="ecuaciones-dos-columnas">
+  <div class="ecuacion">
+    <p>$$ k_w = \frac{1}{1 + 2.1 \left(\frac{D_p}{D_w}\right)} $$</p>
+    <p style="text-align: center; font-size: 0.8em"><b>Ecuación 5.</b> Factor de corrección cuando \(D_p/D_w &lt 0.05\). (Geankoplis, 2006)</p>
+    <p>$$ k_w' = \frac{1 - \left(\frac{D_p}{D_w}\right)^2}{\left[1 + \left(\frac{D_p}{D_w}\right)^4\right]^{1/2}} $$</p>
+    <p style="text-align: center; font-size: 0.8em"><b>Ecuación 6.</b> Factor de corrección cuando \(D_p/D_w &lt 0.05\) y un régimen completamente turbulento. (Geankoplis, 2006)</p>
+  </div>
+</div>
+<p>
+  En el libro <i>“Procesos de transporte y principios de procesos de separación”</i> de Geankoplis (2006), se deduce una expresión para la velocidad terminal <b>en cualquier régimen</b>:
+</p>
+<p>
+  $$v_t = \sqrt{\frac{4(\rho_P - \rho)gD_P}{3C_D\rho}}$$
+</p>
+<p style="text-align: center; font-size: 0.8em">
+<b>Ecuación 7.</b> Velocidad terminal de sedimentación de una partícula esférica rígida para cualquier régimen.
+</p>
+<p>
+  La viscosidad (μ) es una propiedad física intrínseca de un fluido que cuantifica su resistencia a fluir o a deformarse bajo un esfuerzo cortante. (Levine, 2014)
+</p>
+<p>
+  $$Re = \frac{Dv\rho}{\mu}$$
+</p>
+<p style="text-align: center; font-size: 0.8em">
+<b>Ecuación 8.</b> Número de Reynolds dentro de una tubería. (Doran, 2013)
+</p>
+<p>
+  Para recordar, el número de Reynolds viene definido como en la ecuación 8, lo que indica que la turbulencia durante la sedimentación sí depende de la viscosidad del fluido, durante la práctica se van a utilizar tres fluidos distintos (aceite de cocina, glicerina y un shampoo comercial), con diferentes pruebas de efecto de pared (relación $D_P/D_w$), cada uno con una viscosidad y reología única, por lo que se esperarán variaciones en la velocidad de sedimentación.
+</p>
   <section class="lineguinda">
 
   </section>
@@ -115,6 +216,49 @@
 
 <section class="materiales-reactivos-equipos" id="materiales-reactivos-equipos">
   <h2>Materiales, Reactivos y Equipos</h2>
+    <div class="tabla-container">
+    <table class="tabla-materiales">
+      <thead>
+        <tr>
+          <th>Materiales</th>
+          <th>Equipo</th>
+          <th>Reactivos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1 vaso de precipitados de 600 mL.</td>
+          <td>Picnómetro.</td>
+          <td>Shampoo comercial.</td>
+        </tr>
+        <tr>
+          <td>1 probeta de 250 mL.</td>
+          <td>Vernier.</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1 probeta de 100 mL.</td>
+          <td>Termómetro con rango de -20 a 110 °C.</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1 espátula de acero inoxidable.</td>
+          <td>Reómetro programable DV-III ULTRA de marca Brookfield.</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Frascos de canicas,</td>
+          <td></td>
+          <td></td>
+        <tr>
+          <td>Varilla de vidrio.</td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <section class="lineguinda">
 
   </section>
@@ -150,6 +294,36 @@
 
 <section class="cuestionario" id="cuestionario">
   <h2>Cuestionario</h2>
+    <ol class="lista-referencias">
+      <li><b>Analiza y discute la velocidad de sedimentación libre con la frenada y con la que tiene efecto de pared.</b></li>
+      <p>
+        Repuesta 1
+      </p>
+      <li><b>Determina teóricamente cuál tendría que ser la velocidad con efecto de pared de las partículas que utilizaste en la parte experimental.</b></li>
+      <p>
+        Respuesta 2
+      </p>
+      <li><b>¿Cómo determinas experimentalmente la densidad de una partícula?</b></li>
+      <p>
+        Respuesta 3
+      </p>
+      <li><b>¿Cómo determinas la esfericidad para una partícula que no es esférica?</b></li>
+      <p>
+        Respuesta 4
+      </p>
+      <li><b>¿Es importante el efecto de esfericidad en el experimento que llevaste a cabo?</b></li>
+      <p>
+        Respuesta 5
+      </p>
+      <li><b>¿Cómo simplifica los cálculos la Ley de Arquímedes en la estimación de la velocidad de sedimentación libre?</b></li>
+      <p>
+        Respuesta 6
+      </p>
+      <li><b>¿Qué efectos no relacionados al experimento observaste y por qué se deben?</b></li>
+      <p>
+        Respuesta 7
+      </p>
+    </ol>
   <section class="lineguinda">
 
   </section>
@@ -157,12 +331,15 @@
 
 <section class="referencias" id="referencias">
   <h2>Referencias</h2>
-    <p>
-      1.	Harrison, R. G., Todd, P., Rudge, S. R., & Petrides, D. P. (2015). <i>Bioseparations science and engineering</i> (2a ed.). Oxford University Press.
-    </p>
-    <p>
-      2.	Tejeda Mansir, A., Montesinos Cisneros, R. M., & Guzmán Zamudio, R. (2011). <i>Bioseparaciones</i> (2.ª ed.). Pearson Educación.
-    </p>
+     <ol class="lista-referencias">
+      <li>Doran, P. M. (2013). <i>Bioprocess engineering principles</i> (2.ª ed.). Academic Press.</li>
+      <li>Geankoplis, C. J. (2006). <i>Procesos de transporte y principios de procesos de separación</i> (4ª ed.). CECSA.</li>
+      <li>Harrison, R. G., Todd, P., Rudge, S. R., & Petrides, D. P. (2015). <i>Bioseparations science and engineering</i> (2a ed.). Oxford University Press.</li>
+      <li>Levine, I. N. (2014). <i>Principios de fisicoquímica</i> (6ª ed.). McGraw-Hill Education.</li>
+      <li>Tejeda Mansir, A., Montesinos Cisneros, R. M., & Guzmán Zamudio, R. (2011). <i>Bioseparaciones</i> (2.ª ed.). Pearson Educación.</li>
+    </ol>
+
+
   <section class="lineguinda">
 
   </section>
