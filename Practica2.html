@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
     <title>Práctica 2: Sedimentación</title>
+    <!-- Configuración de MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 <body>
 <!-- Menú de navegación -->
@@ -85,8 +100,130 @@
 
   <!-- Botón de descarga -->
   <div class="boton-descarga">
-    <a href="Póster de Práctica 2_EQ5_LBios_6BM1.pdf" download="Poster_Practica1.pdf">📥 Descargar póster en PDF</a>
+    <a href="Póster de Práctica 2_EQ5_LBios_6BM1.pdf" download="Poster_Practica2.pdf">📥 Descargar póster en PDF</a>
   </div>
+
+</section>
+  
+  <section class="cuestionario" id="cuestionario">
+    <section class="lineguinda">
+
+  </section>
+    <h2>Cuestionario</h2>
+    <ol class="lista-referencias">
+      <li><b>Analiza y discute la velocidad de sedimentación libre con la frenada y con la que tiene efecto de pared.</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        <b>Sedimentación libre:</b> se refiere al movimiento de una partícula a través de un fluido claro sin interferencia de otras partículas.
+      </p>
+      <p>
+        <b>Sedimentación frenada:</b> ocurre cuando el número de partículas es grande y estas interfieren entre sí debido a su movimiento. La velocidad de sedimentación es considerablemente menor que la que se calcularía por la Ley de Stokes. (Foust <i>et al.</i>, 1987)
+      </p>
+      <p style="margin-left: 20px;">
+        <b>Mecanismo:</b> Los gradientes de velocidad que rodean a cada partícula son afecta¬ dos por la presencia cercana de otras partículas. La precipitación de las partículas desplaza el líquido y esto genera una velocidad ascendente bastante considerable en él. Por consiguiente, la velocidad del líquido es no¬tablemente mayor con respecto a la partícula que con respecto al propio aparato. (Geankoplis, 2006) 
+      </p>
+      <p>
+        <b>Sedimentación con efecto de pared:</b> el efecto de pared es un fenómeno retardante que se presenta cuando el diámetro de la partícula $(D_p)$ es apreciable con respecto al diámetro del recipiente $(D_w)$ donde se verifica la sedimentación. El efecto de pared provoca una disminución de la velocidad de precipitación terminal. (Geankoplis, 2006).
+        El efecto de pared es una interacción de la partícula con los límites físicos del sistema, independiente de la concentración de otras partículas, y siempre tiende a reducir la velocidad de sedimentación
+      </p>
+      </section>
+
+      <li><b>Determina teóricamente cuál tendría que ser la velocidad con efecto de pared de las partículas que utilizaste en la parte experimental.</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        Esta pregunta se responde con los resultados y la discusión de la práctica previamente vistos.
+      </p>
+      </section>
+
+      <li><b>¿Cómo determinas experimentalmente la densidad de una partícula?</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        Una forma sería mediante el uso de un picnómetro, un frasco de volumen conocido, con un tapón esmerilado que suele tener un capilar, el proceso sería el siguiente:
+      </p>
+        <ol class="P2_Resp3", style="list-style-type: lower-alpha;">
+          <li>Pesar el picnómetro vacío y seco en una balanza analítica $(m_0)$.</li>
+          <li>Pesar la muestra de partículas $(m_p)$.</li>
+          <li>Se introducen las partículas al picnómetro y se vierte parcialmente líquido.</li>
+          <li>Se elimina el aire atrapado en una campana de vacío.</li>
+          <li>Se llena completamente el picnómetro con líquido, el líquido debe rebosar por el capilar.</li>
+          <li>Pesar el picnómetro con líquido y muestra $(m_2)$.</li>
+          <li>Se vacía y se limpia el picnómetro, luego, se le añade sólo líquido hasta llenar.</li>
+          <li>Pesar el picnómetro únicamente con líquido $(m_1)$.</li>
+          <p>Queda definido entonces:</p>
+          <li>
+            Masa del líquido en el picnómetro (sin la muestra):
+            $$m_l = m_1 - m_0$$
+            <p style="text-align: center; font-size: 0.8em"><b>Ecuación X1.</b></p>
+          </li>
+          <li>
+            Masa del líquido desplazado por la muestra:
+            $$m_ld = m_l-(m_2 - m_0 - m_p)$$
+            <p style="text-align: center; font-size: 0.8em"><b>Ecuación X2.</b></p>
+          </li>
+          <li>
+            Volumen del líquido desplazado (igual al volumen de muestra):
+            $$V_l = \frac{m_{ld}}{\rho_l}$$
+            <p style="text-align: center; font-size: 0.8em"><b>Ecuación X3.</b></p>
+            <p>La densidad del líquido sí es conocida desde un principio, póngase pilas.</p>
+          </li>
+          <li>
+            Densidad de la partícula:
+            $$\rho_p = \frac{m_p}{V_l} = \frac{m_p}{\frac{m_{ld}}{\rho_l}} = \frac{m_p \cdot \rho_l}{m_{ld}}$$
+            <p style="text-align: center; font-size: 0.8em"><b>Ecuación X4.</b></p>
+          </li>
+        </ol>
+      </section>
+
+      <li><b>¿Cómo determinas la esfericidad para una partícula que no es esférica?</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        De forma teórica existe una fórmula para la esfericidad, que se define como la relación entre el área superficial de una esfera que tiene el mismo volumen que la partícula y el área superficial real de la partícula:
+      </p>
+      $$\psi = \frac{A_{s,e}}{A_{s,p}} = \frac{\text{Área superficial de una esfera del mismo volumen que la partícula}}{\text{Área superficial de la partícula}}$$
+      <p style="text-align: center; font-size: 0.8em"><b>Ecuación Z1.</b> Esfericidad de una partícula (Foust <i>et al.</i>, 1987)</p>
+      <p>
+        El volumen que ocupa la partícula se puede calcular mediante el principio de Arquímedes, mientras que el cálculo del área superficial de la partícula requiere de técnicas más avanzadas como adsorción de gas (BET).
+        Calcular el área superficial de una esfera con un volumen conocido se hace con la fórmula:
+      </p>
+      $$A_{s,e} = \sqrt[3]{36\pi V^2}$$
+      <p style="text-align: center; font-size: 0.8em"><b>Ecuación Z2.</b> Fórmula para el área superficial de una esfera expresada en términos de volumen.</p>
+      </section>
+
+      <li><b>¿Es importante el efecto de esfericidad en el experimento que llevaste a cabo?</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        En todos los experimentos de sedimentación es importante tomar en cuenta la esfericidad, hay que recordar que la fuerza de arrastre, y por ende el coeficiente de arrastre $(C_D)$ dependen de la forma de la partícula. Una esfera perfecta tiene el área superficial mínima para su volumen, lo que minimiza el arrastre. Cualquier desviación de la esfericidad:
+      </p>
+      <ul style="list-style-type:circle">
+        <li>Aumenta el área superficial para el mismo volumen.</li>
+        <li>Altera el flujo de fluidos alrededor de la partícula, aumentando la turbulencia y el coeficiente de arrastre.</li>
+      </ul>
+      <p style="text-align:right">(McCabe <i>et al.</i>, 2007).</p>
+      <p>
+        Una partícula no esférica sedimentará más lento que una esfera perfecta del mismo volumen y densidad, porque experimenta una mayor fuerza de arrastre.
+        De hecho, existen varios gráficos de número de Reynolds contra coeficiente de arrastre que incluyen varios comportamientos dependientes de la esfericidad, como el de Foust.
+      </p>
+      <p class="piefig" style="text-align: center; font-size: 0.8em"><b>Figura Z3.</b> Coeficiente de arrastre en función de Reynolds. (Foust <i>et al</i>., 1987)</p>
+      </section>
+
+      <li><b>¿Cómo simplifica los cálculos la Ley de Arquímedes en la estimación de la velocidad de sedimentación libre?</b></li>
+      <section style="margin-left: 20px;">
+      <p>
+        La Ley de Arquímedes simplifica los cálculos en la estimación de la velocidad de sedimentación libre al definir la fuerza de flotación, esta fuerza es esencial para establecer el balance de fuerzas que actúan sobre una partícula que se mueve en un fluido. La Ley de Arquímedes permite combinar estos dos efectos en un solo término de densidad neta efectiva $(P_s-P)$ o $Δρ$.
+      </p>
+      <p>
+        Esto simplifica directamente la fórmula, haciendo que el cálculo sea más conciso y que la variable $Δρ$ sea un indicador directo de la fuerza impulsora neta para la sedimentación. Al utilizar la diferencia de densidad, se tiene en cuenta automáticamente el efecto de flotación del fluido, facilitando el cálculo de la velocidad. (Tejeda Mansir <i>et al.</i>, 2011)
+      </p>
+      </section>
+
+      <li><b>¿Qué efectos no relacionados al experimento observaste y por qué se deben?</b></li>
+      <p>
+        Se formaron burbujas, mismas que impulsaron a la partícula en caída, algo que contraviene el hecho que dice que estas deben frenar la caída, sin embargo, dado que la burbuja es interna, por el contrario, es un cúmulo de aire, con menos resistencia al movimiento.
+      </p>
+    </ol>
+  <section class="lineguinda">
+
+  </section>
 </section>
 
 
