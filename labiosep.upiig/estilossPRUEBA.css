@@ -1,0 +1,433 @@
+/* === Barra de navegación fija principal === */
+.navbar {
+  background-color: white;
+  padding: 8px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.navbar a {
+  color: rgb(111,29,69);
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* --- Submenú --- */
+.submenu ul {
+  display: none;
+  position: absolute;
+  background-color: white;
+  list-style: none;
+  padding: 10px 10px;
+  margin: 0;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  z-index: 2100;
+}
+
+.submenu:hover ul {
+  display: block;
+}
+
+.submenu ul li {
+  width: 320px;
+}
+
+.submenu ul li a {
+  font-size: 1em;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.submenu ul li a:hover {
+  background-color: rgba(111,29,69,0.1);
+}
+
+/* === Generales === */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* === Banner === */
+.banner {
+  background-color: rgb(111,29,69);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 80px;
+  color: white;
+  text-align: center;
+}
+
+.banner-imgIZQ { width: 80px; height: auto; }
+.banner-imgDER { width: 105px; height: auto; }
+
+.banner-text { flex: 1; text-align: center; }
+.banner-text h1 { margin: 0; font-size: 3.5em; }
+.banner-text .subtitulo { margin: 5px 0 0 0; font-size: 1.5em; font-weight: bold; }
+
+/* Separador */
+.btbanner { padding: 2px; }
+.lineguinda { padding: 2px; background-color: rgb(111,29,69); }
+
+/* === Sección de presentación === */
+.presentacion {
+  padding: 3px 100px;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(1, 37, 90);
+}
+
+/* === Integrantes y docentes === */
+.equipo {
+  display: flex;
+  justify-content: space-around;
+  padding: 30px;
+  background-color: white;
+  color: rgb(111,29,69);
+  text-align: center;
+  gap: 40px;
+}
+.equipo .columna { flex: 1; max-width: 400px; }
+.equipo h2 { margin-bottom: 15px; font-size: 1.5em; }
+.equipo ul { list-style: none; padding: 0; }
+.equipo li { margin: 5px 0; font-size: 1.1em; }
+
+/* === Pie de página === */
+.Pie {
+  padding: 8px;
+  background-color: rgb(111,29,69);
+  text-align: center;
+}
+.IPNFondo { width: 250px; height: auto; display: inline-block; }
+
+/* === Submenú dentro de prácticas === */
+.submenu-practica {
+  background-color: rgb(1,37,90);
+  padding: 8px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1500;
+}
+.submenu-practica ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px 30px;
+}
+.submenu-practica a {
+  color: white;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+  border-bottom: 2px solid white;
+  transition: border-color 0.3s ease;
+}
+.submenu-practica a:hover { border-bottom-color: rgb(111,112,114); }
+
+/* === Sección de ubicación === */
+.ubicacion {
+  background-color: rgb(111,29,69);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+.ubicacion h2 { margin-bottom: 20px; font-size: 1.8em; }
+.mapa-direccion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+.map-container iframe {
+  width: 300px;
+  height: 200px;
+  border: 0;
+  border-radius: 8px;
+}
+.direccion {
+  font-size: 1.2em;
+  line-height: 1.6em;
+  max-width: 300px;
+  text-align: left;
+}
+
+/* === Secciones de contenido === */
+.resumen, .introduccion, .objetivos,
+.materiales-reactivos-equipos, .descripcion-sistema,
+.metodologia, .resultados-discusion,
+.conclusiones, .cuestionario, .referencias {
+  padding: 15px 60px;
+  background-color: white;
+  color: black;
+}
+.resumen h2, .introduccion h2, .objetivos h2,
+.materiales-reactivos-equipos h2, .descripcion-sistema h2,
+.metodologia h2, .resultados-discusion h2,
+.conclusiones h2, .cuestionario h2, .referencias h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+.resumen p, .introduccion p, .objetivos p,
+.materiales-reactivos-equipos p, .descripcion-sistema p,
+.metodologia p, .resultados-discusion p,
+.conclusiones p, .cuestionario p, .referencias p {
+  text-align: justify;
+  font-size: 1em;
+  line-height: 1.6em;
+  margin-bottom: 15px;
+}
+
+/* === Canva embebido === */
+.canva-doc {
+  max-width: 1000px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.canva-embed-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 1223.6457%;
+  padding-bottom: 0;
+  box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);
+  margin-top: 1.6em;
+  margin-bottom: 0.9em;
+  overflow: hidden;
+  border-radius: 8px;
+  will-change: transform;
+}
+
+.canva-embed-container iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.canva-leyenda {
+  margin-top: 15px;
+  font-size: 1em;
+  font-weight: bold;
+  color: rgb(111,29,69);
+  text-align: center;
+}
+
+/* === Botón de descarga === */
+.boton-descarga {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.boton-descarga a {
+  background-color: rgb(1, 37, 90);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.boton-descarga a:hover {
+  background-color: rgb(0, 28, 70);
+  transform: scale(1.05);
+}
+
+.boton-descarga a:active {
+  transform: scale(0.97);
+}
+
+/* === Mejoras para móviles - Canva === */
+.canva-mobile-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.canva-mobile-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: none;
+}
+
+.canva-scroll-message {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(1, 37, 90, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 15;
+  display: none;
+}
+
+/* Animación para el mensaje */
+@keyframes pulse-message {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .banner {
+    flex-wrap: wrap;
+    padding: 20px;
+    text-align: center;
+  }
+  .banner-imgIZQ, .banner-imgDER {
+    width: 50px;
+    max-width: 20%;
+  }
+  .banner-text h1 { font-size: 2em; }
+  .banner-text .subtitulo { font-size: 1em; }
+
+  .navbar ul { flex-direction: column; gap: 12px; }
+  .submenu ul li { width: 100%; }
+
+  .resumen, .introduccion, .objetivos,
+  .materiales-reactivos-equipos, .descripcion-sistema,
+  .metodologia, .resultados-discusion,
+  .conclusiones, .cuestionario, .referencias {
+    padding: 15px 20px;
+  }
+
+  .equipo { flex-direction: column; gap: 20px; }
+
+  .map-container iframe {
+    width: 100%;
+    height: 250px;
+  }
+  .direccion { text-align: center; margin-top: 15px; }
+
+  .canva-leyenda { font-size: 0.9em; padding: 0 10px; }
+  
+  /* Mostrar overlay y mensaje en móviles */
+  .canva-mobile-overlay {
+    display: block;
+  }
+  
+  .canva-scroll-message {
+    display: block;
+    animation: pulse-message 2s infinite;
+  }
+  
+  /* Ajustar el iframe para móviles */
+  .canva-embed-container iframe {
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-text h1 { font-size: 1.5em; }
+  .banner-text .subtitulo { font-size: 0.9em; }
+  .equipo h2 { font-size: 1.2em; }
+  .submenu-practica a {
+    font-size: 0.9em;
+    padding: 5px 8px;
+  }
+  
+  .boton-descarga a {
+    font-size: 1em;
+    padding: 10px 18px;
+  }
+  
+  .canva-scroll-message {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+}
+
+/* === Botón hamburguesa === */
+.menu-toggle {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: rgb(111,29,69);
+  background: none;
+  border: none;
+  padding: 8px 16px;
+}
+
+/* --- Vista móvil --- */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+    background-color: white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid rgb(111,29,69);
+  }
+
+  .navbar ul.show {
+    display: flex;
+  }
+
+  .navbar ul li {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .submenu ul {
+    position: static;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .submenu ul li {
+    width: 100%;
+  }
+}
