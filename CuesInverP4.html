@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Planta Purificadora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6b1740;
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+            box-shadow: 0 0 0 3px var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .matching-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .matching-item {
+            display: grid;
+            grid-template-columns: 1fr 50px;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        .matching-item input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.5rem;
+            transition: border-color 0.2s;
+        }
+        .matching-item input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background-color: #f7f7f7;
+            border-color: var(--primary-color);
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Operación de Planta Purificadora</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">15:00</div>
+        </div>
+
+        <form id="quiz-form"></form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+
+    <div id="floating-timer" class="floating-timer">15:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+            const floatingTimerElement = document.getElementById('floating-timer');
+
+            const quizData = [
+                { type: 'true-false', question: '1. El filtro suavizador tiene como función principal eliminar el color, olor y sabor del agua.', answer: 'false' },
+                { type: 'true-false', question: '2. La ósmosis inversa funciona aplicando una presión hidrostática superior a la presión osmótica.', answer: 'true' },
+                { type: 'true-false', question: '3. La técnica de Mohr se utiliza para determinar la concentración de cloro residual (Cl₂) en el agua.', answer: 'false' },
+                { type: 'true-false', question: '4. La dureza del agua es causada principalmente por altas concentraciones de iones de Calcio (Ca²⁺) y Magnesio (Mg²⁺).', answer: 'true' },
+                { type: 'true-false', question: '5. La esterilización con luz UV es más efectiva en aguas con alta turbidez, ya que las partículas ayudan a difundir la luz.', answer: 'false' },
+                {
+                    type: 'multiple-choice',
+                    question: '6. ¿Cuál es el principio fundamental que permite al carbón activado eliminar impurezas del agua?',
+                    options: ['Intercambio iónico', 'Precipitación química', 'Adsorción en su superficie porosa', 'Filtración por tamaño de partícula'],
+                    answer: 'Adsorción en su superficie porosa'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '7. El proceso de ablandamiento del agua en el filtro suavizador consiste en intercambiar iones de Ca²⁺ y Mg²⁺ por iones de:',
+                    options: ['Cloruro (Cl⁻)', 'Sodio (Na⁺)', 'Hidroxilo (OH⁻)', 'Hidrógeno (H⁺)'],
+                    answer: 'Sodio (Na⁺)'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '8. Según la introducción, el agua pura a 25°C tiene un pH neutro de:',
+                    options: ['5.5', '6.5', '7.0', '8.0'],
+                    answer: '7.0'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '9. ¿Qué reactivo se utiliza como titulante en el método de Mohr para la determinación de cloruros?',
+                    options: ['EDTA', 'Nitrato de plata (AgNO₃)', 'Cromato de potasio (K₂CrO₄)', 'Ortotolidina'],
+                    answer: 'Nitrato de plata (AgNO₃)'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '10. ¿Cuál es el propósito de inyectar gas ozono como una de las operaciones terminales?',
+                    options: [
+                        'Ajustar el pH del agua',
+                        'Aumentar la dureza del agua',
+                        'Actuar como un potente bactericida para complementar la desinfección',
+                        'Eliminar los iones de sodio'
+                    ],
+                    answer: 'Actuar como un potente bactericida para complementar la desinfección'
+                },
+                {
+                    type: 'matching',
+                    question: '11-15. Relaciona el proceso o técnica de la Columna A con su descripción correcta en la Columna B.',
+                    columnA: {
+                        '11': 'Filtro de arenas',
+                        '12': 'Ósmosis Inversa',
+                        '13': 'Titulación con EDTA',
+                        '14': 'Ortotolidina',
+                        '15': 'Conductividad eléctrica'
+                    },
+                    columnB: {
+                        'a': 'Proceso de membrana que retiene sales y solutos de bajo peso molecular.',
+                        'b': 'Mide la capacidad del agua para conducir corriente, relacionada con los iones disueltos.',
+                        'c': 'Reactivo para medir cloro residual, actualmente en desuso por ser carcinógeno.',
+                        'd': 'Proceso físico que retiene partículas suspendidas mayores a 5-10 micras.',
+                        'e': 'Técnica analítica para determinar la dureza total del agua.'
+                    },
+                    answers: { '11': 'd', '12': 'a', '13': 'e', '14': 'c', '15': 'b' }
+                }
+            ];
+
+            let time = 15 * 60;
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                const seconds = (time % 60).toString().padStart(2, '0');
+                const timeString = `${minutes}:${seconds}`;
+                timerElement.textContent = timeString;
+                floatingTimerElement.textContent = timeString;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        time = 0;
+                        updateTimerDisplay();
+                        if (!submitButton.disabled) {
+                            alert("¡El tiempo se ha acabado! El cuestionario se calificará automáticamente.");
+                            calculateScore();
+                        }
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.id = `question-${index}`;
+
+                    const questionTitle = document.createElement('p');
+                    questionTitle.className = 'question-title';
+                    questionTitle.textContent = qData.question;
+                    questionCard.appendChild(questionTitle);
+
+                    if (qData.type === 'true-false') {
+                        questionCard.innerHTML += `
+                            <div class="flex flex-col space-y-2">
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="true">
+                                    <span class="ml-3">Verdadero</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="false">
+                                    <span class="ml-3">Falso</span>
+                                </label>
+                            </div>
+                        `;
+                    } else if (qData.type === 'multiple-choice') {
+                        const optionsContainer = document.createElement('div');
+                        optionsContainer.className = 'flex flex-col space-y-2';
+                        qData.options.forEach(option => {
+                            optionsContainer.innerHTML += `
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="${option}">
+                                    <span class="ml-3">${option}</span>
+                                </label>
+                            `;
+                        });
+                        questionCard.appendChild(optionsContainer);
+                    } else if (qData.type === 'matching') {
+                        const matchingContainer = document.createElement('div');
+                        matchingContainer.className = 'matching-container';
+
+                        const colA = document.createElement('div');
+                        colA.className = 'matching-column';
+                        colA.innerHTML += '<h4 class="font-semibold mb-2 text-gray-700">Columna A</h4>';
+                        Object.entries(qData.columnA).forEach(([key, value]) => {
+                            colA.innerHTML += `
+                                <div class="matching-item" id="match-item-${key}">
+                                    <span>${key}. ${value}</span>
+                                    <input type="text" maxlength="1" data-match-id="${key}">
+                                </div>
+                            `;
+                        });
+
+                        const colB = document.createElement('div');
+                        colB.className = 'matching-column';
+                        colB.innerHTML += '<h4 class="font-semibold mb-2 text-gray-700">Columna B</h4>';
+                        Object.entries(qData.columnB).forEach(([key, value]) => {
+                            colB.innerHTML += `<span class="p-2">(${key}) ${value}</span>`;
+                        });
+
+                        matchingContainer.appendChild(colA);
+                        matchingContainer.appendChild(colB);
+                        questionCard.appendChild(matchingContainer);
+                    }
+                    quizContainer.appendChild(questionCard);
+                });
+            }
+
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+                let score = 0;
+                let totalQuestions = 0;
+
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.getElementById(`question-${index}`);
+
+                    if (qData.type === 'true-false' || qData.type === 'multiple-choice') {
+                        totalQuestions++;
+                        const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                        if (userAnswer && userAnswer.value.toString() === qData.answer.toString()) {
+                            score++;
+                            questionCard.classList.add('correct');
+                        } else {
+                            questionCard.classList.add('incorrect');
+                        }
+                    } else if (qData.type === 'matching') {
+                        Object.keys(qData.columnA).forEach(key => {
+                            totalQuestions++;
+                            const input = document.querySelector(`input[data-match-id="${key}"]`);
+                            const matchItem = document.getElementById(`match-item-${key}`);
+                            if (input && input.value.toLowerCase() === qData.answers[key]) {
+                                score++;
+                                matchItem.classList.add('correct');
+                            } else if (matchItem) {
+                                matchItem.classList.add('incorrect');
+                            }
+                        });
+                    }
+                });
+
+                submitButton.textContent = 'Cuestionario Finalizado';
+                const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${percentage >= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                        Tu calificación es: ${score} de ${totalQuestions} (${percentage}%)
+                    </div>
+                `;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                floatingTimerElement.style.display = rect.bottom < 0 ? 'block' : 'none';
+            }
+
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay();
+
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                calculateScore();
+            });
+
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>
