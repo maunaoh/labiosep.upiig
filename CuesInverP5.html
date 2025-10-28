@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Ósmosis Inversa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6b1740; /* rgb(107, 23, 64) */
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+             box-shadow: 0 0 0 3px var(--primary-color);
+             border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .matching-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .matching-item {
+            display: grid;
+            grid-template-columns: 1fr 50px;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        .matching-item input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.5rem;
+            transition: border-color 0.2s;
+        }
+        .matching-item input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background-color: #f7f7f7;
+            border-color: var(--primary-color);
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Práctica 5: Ósmosis Inversa</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">15:00</div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+    
+    <!-- Cronómetro flotante -->
+    <div id="floating-timer" class="floating-timer">15:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+            const floatingTimerElement = document.getElementById('floating-timer');
+
+            // --- DATOS DEL CUESTIONARIO (BASADOS EN EL REPORTE 5) ---
+            const quizData = [
+                // Verdadero o Falso
+                {
+                    type: 'true-false',
+                    question: '1. La ósmosis es un proceso forzado que requiere una presión hidrostática mayor a la presión osmótica.',
+                    answer: 'false' // Falso, esa es la Ósmosis Inversa.
+                },
+                {
+                    type: 'true-false',
+                    question: '2. El modelo de "solución-difusión" describe el transporte de solutos a través de la membrana de Ósmosis Inversa.',
+                    answer: 'true'
+                },
+                {
+                    type: 'true-false',
+                    question: '3. El flujo de soluto (sal) a través de la membrana es directamente proporcional a la presión aplicada.',
+                    answer: 'false' // Falso, es esencialmente constante e independiente.
+                },
+                {
+                    type: 'true-false',
+                    question: '4. La presión osmótica de una solución es proporcional a la concentración del soluto y a la temperatura.',
+                    answer: 'true'
+                },
+                {
+                    type: 'true-false',
+                    question: '5. Las membranas de microfiltración (MF) operan a presiones mucho más altas que las de ósmosis inversa (OI).',
+                    answer: 'false' // Falso, OI opera a presiones mucho mayores.
+                },
+                // Opción Múltiple
+                {
+                    type: 'multiple-choice',
+                    question: '6. ¿Cuál es la fuerza impulsora principal en la Ósmosis Inversa?',
+                    options: [
+                        'Un gradiente de concentración',
+                        'Una presión hidrostática (Δp) mayor que la presión osmótica (Δπ)',
+                        'Un potencial eléctrico',
+                        'Un gradiente de temperatura'
+                    ],
+                    answer: 'Una presión hidrostática (Δp) mayor que la presión osmótica (Δπ)'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '7. Según el reporte, ¿cuál es una de las principales ventajas de la OI sobre el intercambio iónico?',
+                    options: [
+                        'No se requieren reactivos químicos para la regeneración',
+                        'Utiliza altos potenciales eléctricos',
+                        'Requiere un cambio de fase (calor)',
+                        'Es menos efectiva para separar iones'
+                    ],
+                    answer: 'No se requieren reactivos químicos para la regeneración'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '8. ¿Cómo se define la presión osmótica (π)?',
+                    options: [
+                        'La presión necesaria para forzar el flujo de soluto',
+                        'La presión hidrostática requerida para detener el flujo de agua durante la ósmosis normal',
+                        'La presión aplicada por el soluto sobre la membrana',
+                        'La presión necesaria para iniciar la microfiltración'
+                    ],
+                    answer: 'La presión hidrostática requerida para detener el flujo de agua durante la ósmosis normal'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '9. ¿Cuál es la principal diferencia en el mecanismo de separación entre OI y Microfiltración (MF)?',
+                    options: [
+                        'OI usa tamizado molecular y MF usa solución-difusión',
+                        'OI usa solución-difusión y MF usa tamizado molecular (flujo por poro)',
+                        'Ambas usan tamizado molecular, pero con diferentes tamaños de poro',
+                        'Ambas usan solución-difusión, pero con diferentes presiones'
+                    ],
+                    answer: 'OI usa solución-difusión y MF usa tamizado molecular (flujo por poro)'
+                },
+                {
+                    type: 'multiple-choice',
+                    question: '10. ¿Cuál es una aplicación biotecnológica clave de la OI mencionada en el cuestionario prelaboratorio?',
+                    options: [
+                        'Crear nuevas especies de bacterias',
+                        'Producir agua de grado farmacéutico (WFI y Agua Purificada)',
+                        'Aumentar la temperatura de los fermentadores',
+                        'Medir la conductividad de las células'
+                    ],
+                    answer: 'Producir agua de grado farmacéutico (WFI y Agua Purificada)'
+                },
+                // Relacionar Columnas
+                {
+                    type: 'matching',
+                    question: '11-15. Relaciona el concepto de la Columna A con su descripción correcta en la Columna B.',
+                    columnA: {
+                        '11': 'Ósmosis',
+                        '12': 'Constante Aw',
+                        '13': 'Ecuación de Van\'t Hoff',
+                        '14': 'Membrana TFC',
+                        '15': 'Conductividad Eléctrica'
+                    },
+                    columnB: {
+                        'a': 'Mide la capacidad de una solución para conducir corriente, relacionada con los iones.',
+                        'b': 'Flujo espontáneo de solvente del lado menos concentrado al más concentrado.',
+                        'c': 'Constante de permeabilidad al disolvente (agua) de la membrana.',
+                        'd': 'Membrana Compuesta de Película Delgada (Thin Film Composite).',
+                        'e': 'Estima la presión osmótica (π) basándose en la concentración molar (C) y la temperatura (T).'
+                    },
+                    answers: { '11': 'b', '12': 'c', '13': 'e', '14': 'd', '15': 'a' }
+                }
+            ];
+
+            // --- LÓGICA DEL CRONÓMETRO ---
+            let time = 15 * 60; 
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                const seconds = (time % 60).toString().padStart(2, '0');
+                const timeString = `${minutes}:${seconds}`;
+                timerElement.textContent = timeString;
+                floatingTimerElement.textContent = timeString;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        time = 0;
+                        updateTimerDisplay();
+                        if (!submitButton.disabled) {
+                           alert("¡El tiempo se ha acabado! El cuestionario se calificará automáticamente.");
+                           calculateScore();
+                        }
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // --- RENDERIZADO DEL CUESTIONARIO ---
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.id = `question-${index}`;
+
+                    const questionTitle = document.createElement('p');
+                    questionTitle.className = 'question-title';
+                    questionTitle.textContent = qData.question;
+                    questionCard.appendChild(questionTitle);
+
+                    if (qData.type === 'true-false') {
+                        questionCard.innerHTML += `
+                            <div class="flex flex-col space-y-2">
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="true" class="form-radio text-green-600 focus:ring-green-500">
+                                    <span class="ml-3">Verdadero</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="false" class="form-radio text-red-600 focus:ring-red-500">
+                                    <span class="ml-3">Falso</span>
+                                </label>
+                            </div>
+                        `;
+                    } else if (qData.type === 'multiple-choice') {
+                        const optionsContainer = document.createElement('div');
+                        optionsContainer.className = 'flex flex-col space-y-2';
+                        qData.options.forEach(option => {
+                            // Reemplazar (Δp) y (Δπ) con notación de superíndice/subíndice si es necesario o dejarlos como texto
+                            let formattedOption = option.replace('(Δp)', '(Δp)').replace('(Δπ)', '(Δπ)');
+                            optionsContainer.innerHTML += `
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="${option}" class="form-radio" style="color: var(--primary-color);">
+                                    <span class="ml-3">${formattedOption}</span>
+                                </label>
+                            `;
+                        });
+                        questionCard.appendChild(optionsContainer);
+                    } else if (qData.type === 'matching') {
+                        const matchingContainer = document.createElement('div');
+                        matchingContainer.className = 'matching-container';
+                        
+                        const colA = document.createElement('div');
+                        colA.className = 'matching-column';
+                        colA.innerHTML += '<h4 class="font-semibold mb-2 text-gray-700">Columna A</h4>';
+                        Object.entries(qData.columnA).forEach(([key, value]) => {
+                             colA.innerHTML += `
+                                <div class="matching-item" id="match-item-${key}">
+                                    <span>${key}. ${value}</span>
+                                    <input type="text" maxlength="1" data-match-id="${key}" class="form-input ml-auto">
+                                </div>
+                            `;
+                        });
+
+                        const colB = document.createElement('div');
+                        colB.className = 'matching-column';
+                        colB.innerHTML += '<h4 class="font-semibold mb-2 text-gray-700">Columna B</h4>';
+                        Object.entries(qData.columnB).forEach(([key, value]) => {
+                             colB.innerHTML += `<span class="p-2">(${key}) ${value}</span>`;
+                        });
+                        
+                        matchingContainer.appendChild(colA);
+                        matchingContainer.appendChild(colB);
+                        questionCard.appendChild(matchingContainer);
+                    }
+                    quizContainer.appendChild(questionCard);
+                });
+            }
+
+            // --- LÓGICA DE CALIFICACIÓN ---
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+                let score = 0;
+                let totalQuestions = 0;
+
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.getElementById(`question-${index}`);
+                    
+                    if (qData.type === 'true-false' || qData.type === 'multiple-choice') {
+                        totalQuestions++;
+                        const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                        if (userAnswer && userAnswer.value.toString() === qData.answer.toString()) {
+                            score++;
+                            questionCard.classList.add('correct');
+                        } else {
+                            questionCard.classList.add('incorrect');
+                        }
+                    } else if (qData.type === 'matching') {
+                         Object.keys(qData.columnA).forEach(key => {
+                             totalQuestions++;
+                             const input = document.querySelector(`input[data-match-id="${key}"]`);
+                             const matchItem = document.getElementById(`match-item-${key}`);
+                             if(input && input.value.toLowerCase() === qData.answers[key]) {
+                                 score++;
+                                 matchItem.classList.add('correct');
+                             } else if (matchItem) {
+                                 matchItem.classList.add('incorrect');
+                             }
+                         });
+                    }
+                });
+
+                submitButton.textContent = 'Cuestionario Finalizado';
+                const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${percentage >= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                        Tu calificación es: ${score} de ${totalQuestions} (${percentage}%)
+                    </div>
+                `;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // --- LÓGICA DEL CRONÓMETRO FLOTANTE ---
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                if (rect.bottom < 0) { // Si el temporizador principal ya no está visible
+                    floatingTimerElement.style.display = 'block';
+                } else {
+                    floatingTimerElement.style.display = 'none';
+                }
+            }
+
+            // --- INICIALIZACIÓN ---
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay(); // Llamada inicial para mostrar 15:00
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                calculateScore();
+            });
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>

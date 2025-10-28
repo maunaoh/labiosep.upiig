@@ -61,10 +61,13 @@
   <div id="resumen-inicial" class="resumen">
   <h2>Resumen</h2>
   <p>
-    Esta práctica de laboratorio aún no se ha realizado.
+    En esta práctica se operó un equipo de ósmosis inversa para desalinizar una solución de agua problema, inicialmente, se elaboró una curva de calibración para relacionar la conductividad eléctrica con la concentración de sal, usando NaCl, se realizaron pruebas preliminares a distintos flujos de alimentación (5, 10, 15, 20 L/min y flujo máximo) para determinar el flujo óptimo (15 L/min), basándose en la mínima conductividad del permeado. Posteriormente, se operó el sistema a 15 L/min durante 40 minutos, registrando periódicamente la conductividad, temperatura y presión de las corrientes de alimentación, permeado, rechazo.
   </p>
   <p>
-    ¿Quiere visitar el anexo de información? Hágalo el 13 de octubre, tampoco está acabado :C
+    Se calcularon las presiones osmóticas para cada corriente y tiempo, observándose su incremento a medida que aumentaba la concentración de sal. Se evaluó el rendimiento de la membrana calculando el porcentaje de rechazo de sales, factor de recuperación instantáneo y global, y flux de permeado. Además, se determinaron las constantes de permeabilidad de la membrana (disolvente y soluto).
+  </p>
+  <p>
+    Finalmente, se discutieron estos resultados comparando con valores teóricos y explicando su relación con el tipo de membrana (TFC-ULP). También se analizó el comportamiento anómalo de la presión y la contaminación observada en el agua producto almacenada, relacionándola con fenómenos de transporte como difusión y la absorción de CO2.
   </p>
 </div>
 
@@ -98,34 +101,84 @@ document.querySelectorAll(".submenu > a").forEach(item => {
 const modeContent = document.getElementById("mode-content");
 
 const posterHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
+<section class="canva-doc">
+  <div class="canva-mobile-container">
+<div style="position: relative; width: 100%; height: 0; padding-top: 400.5857%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG2w7sQg0Y/-RN7z4mu8LEyOPe1NIVHNw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+
+
+    <div class="canva-mobile-overlay" id="canva-overlay"></div>
+
+    <div class="canva-scroll-message" id="scroll-message">
+      Desliza para navegar el póster
+    </div>
+  </div>
+
+  <p class="canva-leyenda">
+    Silao de la Victoria, Gto., a martes 28 de octubre del 2025
+  </p>
+
+  <div class="boton-descarga">
+    <a href="Póster de Práctica 5_EQ5_LBios_6BM1.pdf" download="Poster_Practica5.pdf">📥 Descargar póster en PDF</a>
+  </div>
+</section>
+
+`;
+
+const reporteHTML = `
+  <div class="pdf-viewer">
+    <embed src="Reporte 5_EQ5_6BM1_LBios.pdf" type="application/pdf" width="75%" height="800px"/>
   </div>
 `;
 
-const placeholderHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
-  </div>
+const inversoHTML = `
+  <iframe src="CuesInverP5.html" 
+          style="width:100%; height: 900px; border:none;">
+  </iframe>
 `;
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const mode = btn.getAttribute("data-mode");
-
-    // Ocultar resumen al elegir un modo
-    const resumen = document.getElementById("resumen-inicial");
-    if (resumen) resumen.style.display = "none";
+    document.getElementById("resumen-inicial").style.display = "none";
 
     if (mode === "poster") {
       modeContent.innerHTML = posterHTML;
-    } else {
-      modeContent.innerHTML = placeholderHTML;
+    } else if (mode === "reporte") {
+      modeContent.innerHTML = reporteHTML;
+    } else if (mode === "inverso") {
+      modeContent.innerHTML = inversoHTML;
     }
   });
 });
+
+
+
+function activarOverlayCanva() {
+  const canvaIframe = document.getElementById("canva-iframe");
+  const canvaOverlay = document.getElementById("canva-overlay");
+  const scrollMessage = document.getElementById("scroll-message");
+
+  if (window.innerWidth <= 768) {
+    canvaOverlay.addEventListener('touchstart', function(e) {
+      canvaIframe.style.pointerEvents = 'auto';
+      if (scrollMessage) scrollMessage.style.display = 'none';
+      e.stopPropagation();
+    });
+
+    document.addEventListener('touchstart', function(e) {
+      if (!canvaOverlay.contains(e.target)) {
+        canvaIframe.style.pointerEvents = 'none';
+        if (scrollMessage) scrollMessage.style.display = 'block';
+      }
+    });
+  }
+}
 
 // No mostrar nada al cargar
 modeContent.innerHTML = "";
