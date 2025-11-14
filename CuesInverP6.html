@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Extracción Líquido-Líquido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6b1740;
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+            box-shadow: 0 0 0 3px var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border: 2px solid var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border: 2px solid var(--incorrect-border);
+        }
+        .matching-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .matching-item {
+            display: grid;
+            grid-template-columns: 1fr 50px;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        .matching-item input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.5rem;
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Práctica 6: Extracción Líquido-Líquido</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">15:00</div>
+        </div>
+
+        <form id="quiz-form"></form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+
+    <div id="floating-timer" class="floating-timer">15:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const floatingTimerElement = document.getElementById('floating-timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+
+            // ---------------- QUIZ DATA ----------------
+            const quizData = [
+                { type: "true-false", question: "1. La Extracción Líquido-Líquido (ELL) requiere que el disolvente de extracción sea completamente miscible con la solución original.", answer: "false" },
+                { type: "true-false", question: "2. La fase 'refinado' es la fase rica en disolvente y soluto extraído.", answer: "false" },
+                { type: "true-false", question: "3. Una ventaja de la ELL sobre la destilación es su utilidad para separar sustancias sensibles a la temperatura.", answer: "true" },
+                { type: "true-false", question: "4. En el sistema de la práctica (Etanol-Hexano-Agua), el Etanol actúa como el disolvente extractor.", answer: "false" },
+                { type: "true-false", question: "5. La escala de Grados Brix (°Bx) mide directamente el porcentaje en masa de etanol en una solución.", answer: "false" },
+
+                {
+                    type: "multiple-choice",
+                    question: "6. ¿Cuál es el propósito principal del empaque en una columna?",
+                    options: ["Disminuir la temperatura", "Maximizar el área interfacial", "Filtrar sólidos", "Asegurar flujo concurrente"],
+                    answer: "Maximizar el área interfacial"
+                },
+                {
+                    type: "multiple-choice",
+                    question: "7. La ELL es preferible cuando los componentes tienen...",
+                    options: ["Puntos de ebullición diferentes", "Alta sensibilidad al frío", "Baja volatilidad relativa", "Diferentes colores"],
+                    answer: "Baja volatilidad relativa"
+                },
+                {
+                    type: "multiple-choice",
+                    question: "8. En un diagrama ternario, la curva binodal representa...",
+                    options: [
+                        "La línea de operación",
+                        "La zona de sólidos",
+                        "El límite entre 1 fase y 2 fases",
+                        "Relación temperatura-presión"
+                    ],
+                    answer: "El límite entre 1 fase y 2 fases"
+                },
+                {
+                    type: "multiple-choice",
+                    question: "9. ¿Para qué se usa un refractómetro en esta práctica?",
+                    options: [
+                        "Medir presión",
+                        "Medir pH",
+                        "Determinar composición por IR",
+                        "Contar bacterias"
+                    ],
+                    answer: "Determinar composición por IR"
+                },
+                {
+                    type: "multiple-choice",
+                    question: "10. ¿Ventaja de una columna empacada?",
+                    options: [
+                        "Más económica",
+                        "Eficiencia menor",
+                        "Reduce retromezclado axial",
+                        "Solo para líquidos del mismo color"
+                    ],
+                    answer: "Reduce retromezclado axial"
+                },
+
+                {
+                    type: "matching",
+                    question: "11-15. Relaciona los componentes:",
+                    columnA: {
+                        "11": "Agua",
+                        "12": "Hexano",
+                        "13": "Etanol",
+                        "14": "Anillos Raschig",
+                        "15": "Inundación"
+                    },
+                    columnB: {
+                        "a": "Soluto miscible en ambas fases",
+                        "b": "Aumenta área interfacial",
+                        "c": "Límite hidrodinámico",
+                        "d": "Disolvente extractor polar",
+                        "e": "Disolvente no polar"
+                    },
+                    answers: { "11": "d", "12": "e", "13": "a", "14": "b", "15": "c" }
+                }
+            ];
+
+            // ---------------- TIMER ----------------
+            let time = 15 * 60;
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+                const seconds = String(time % 60).padStart(2, '0');
+                const text = `${minutes}:${seconds}`;
+                timerElement.textContent = text;
+                floatingTimerElement.textContent = text;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        calculateScore();
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // ---------------- QUIZ RENDER ----------------
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const card = document.createElement("div");
+                    card.className = "question-card";
+                    card.id = `question-${index}`;
+
+                    card.innerHTML = `<p class="question-title">${qData.question}</p>`;
+
+                    if (qData.type === "true-false") {
+                        card.innerHTML += `
+                            <label class="option-label">
+                                <input type="radio" name="q${index}" value="true">
+                                <span class="ml-3">Verdadero</span>
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="q${index}" value="false">
+                                <span class="ml-3">Falso</span>
+                            </label>`;
+                    }
+
+                    else if (qData.type === "multiple-choice") {
+                        qData.options.forEach(option => {
+                            card.innerHTML += `
+                                <label class="option-label">
+                                    <input type="radio" name="q${index}" value="${option}">
+                                    <span class="ml-3">${option}</span>
+                                </label>`;
+                        });
+                    }
+
+                    else if (qData.type === "matching") {
+                        const matchDiv = document.createElement("div");
+                        matchDiv.className = "matching-container";
+
+                        let colA = `<div class="matching-column"><h4 class="font-semibold mb-2">Columna A</h4>`;
+                        Object.entries(qData.columnA).forEach(([key, val]) => {
+                            colA += `
+                                <div class="matching-item" id="match-item-${key}">
+                                    <span>${key}. ${val}</span>
+                                    <input type="text" maxlength="1" data-match-id="${key}">
+                                </div>`;
+                        });
+                        colA += `</div>`;
+
+                        let colB = `<div class="matching-column"><h4 class="font-semibold mb-2">Columna B</h4>`;
+                        Object.entries(qData.columnB).forEach(([key, val]) => {
+                            colB += `<span>(${key}) ${val}</span>`;
+                        });
+                        colB += `</div>`;
+
+                        matchDiv.innerHTML = colA + colB;
+                        card.appendChild(matchDiv);
+                    }
+
+                    quizContainer.appendChild(card);
+                });
+            }
+
+            // ---------------- GRADING ----------------
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+
+                let score = 0;
+                let total = 0;
+
+                quizData.forEach((qData, index) => {
+                    const card = document.getElementById(`question-${index}`);
+
+                    if (qData.type !== "matching") {
+                        total++;
+                        const chosen = document.querySelector(`input[name="q${index}"]:checked`);
+                        if (chosen && chosen.value == qData.answer) {
+                            score++;
+                            card.classList.add("correct");
+                        } else {
+                            card.classList.add("incorrect");
+                        }
+                    } else {
+                        Object.keys(qData.columnA).forEach(key => {
+                            total++;
+                            const input = document.querySelector(`input[data-match-id="${key}"]`);
+                            const val = input.value.trim().toLowerCase();
+                            const correct = qData.answers[key];
+
+                            const item = document.getElementById(`match-item-${key}`);
+
+                            if (val === correct) {
+                                score++;
+                                item.classList.add("correct");
+                            } else {
+                                item.classList.add("incorrect");
+                            }
+                        });
+                    }
+                });
+
+                const pct = ((score / total) * 100).toFixed(2);
+
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${pct >= 60 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}">
+                        Tu calificación es: ${score} de ${total} (${pct}%)
+                    </div>`;
+            }
+
+            // ---------------- FLOATING TIMER ----------------
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                floatingTimerElement.style.display = rect.bottom < 0 ? "block" : "none";
+            }
+
+            // ---------------- INIT ----------------
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay();
+
+            submitButton.addEventListener("click", e => {
+                e.preventDefault();
+                calculateScore();
+            });
+
+            window.addEventListener("scroll", handleScroll);
+        });
+    </script>
+
+</body>
+</html>
