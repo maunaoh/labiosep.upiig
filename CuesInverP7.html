@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Destilación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax para renderizar fórmulas matemáticas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #6b1740; /* rgb(107, 23, 64) */
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+             box-shadow: 0 0 0 3px var(--primary-color);
+             border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background-color: #f7f7f7;
+            border-color: var(--primary-color);
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Práctica 7: Destilación</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">20:00</div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+    
+    <!-- Cronómetro flotante -->
+    <div id="floating-timer" class="floating-timer">20:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+            const floatingTimerElement = document.getElementById('floating-timer');
+
+            // --- DATOS DEL CUESTIONARIO (25 PREGUNTAS) ---
+            const quizData = [
+                {
+                    question: '1. ¿Cuál es el principio fundamental en el que se basa la destilación?',
+                    options: [
+                        'Diferencias en la densidad',
+                        'Diferencias en la volatilidad o presión de vapor',
+                        'Diferencias en la solubilidad',
+                        'Diferencias en el tamaño molecular'
+                    ],
+                    answer: 'Diferencias en la volatilidad o presión de vapor'
+                },
+                {
+                    question: '2. Matemáticamente, ¿cómo se expresa la Ley de Raoult simple para un componente \\(i\\)?',
+                    options: [
+                        '\\(y_i P = x_i P_i^{sat}\\)',
+                        '\\(P = \\sum x_i\\)',
+                        '\\(y_i = \\alpha x_i\\)',
+                        '\\(y_i P = x_i \\gamma_i P_i^{sat}\\)'
+                    ],
+                    answer: '\\(y_i P = x_i P_i^{sat}\\)'
+                },
+                {
+                    question: '3. ¿Qué es un azeótropo?',
+                    options: [
+                        'Una mezcla que se separa en una etapa',
+                        'Una mezcla donde \\(x = y\\) y hierve a T constante',
+                        'El punto de volatilidad infinita',
+                        'Una solución ideal'
+                    ],
+                    answer: 'Una mezcla donde \\(x = y\\) y hierve a T constante'
+                },
+                {
+                    question: '4. ¿Por qué falló la simulación con Ley de Raoult simple para el sistema etanol-agua?',
+                    options: [
+                        'Presión muy alta',
+                        'El sistema es fuertemente no ideal y forma azeótropo',
+                        'El etanol es menos volátil',
+                        'Por usar columna empacada'
+                    ],
+                    answer: 'El sistema es fuertemente no ideal y forma azeótropo'
+                },
+                {
+                    question: '5. ¿Cómo se define la volatilidad relativa (\\(\\alpha\\))?',
+                    options: [
+                        '\\(T_B - T_A\\)',
+                        'El cociente de presiones de vapor o constantes \\(K_A / K_B\\)',
+                        'Suma de fracciones molares',
+                        'Relación de calores latentes'
+                    ],
+                    answer: 'El cociente de presiones de vapor o constantes \\(K_A / K_B\\)'
+                },
+                {
+                    question: '6. En McCabe-Thiele, ¿qué representa la línea diagonal de 45 grados?',
+                    options: [
+                        'Línea de alimentación',
+                        'Curva de equilibrio',
+                        'Lugar geométrico donde \\(y = x\\)',
+                        'Línea de operación de enriquecimiento'
+                    ],
+                    answer: 'Lugar geométrico donde \\(y = x\\)'
+                },
+                {
+                    question: '7. ¿Qué representa la "línea q" en McCabe-Thiele?',
+                    options: [
+                        'La condición térmica de la alimentación',
+                        'La eficiencia',
+                        'La composición del destilado',
+                        'La pérdida de calor'
+                    ],
+                    answer: 'La condición térmica de la alimentación'
+                },
+                {
+                    question: '8. ¿Qué instrumento se usó principalmente para medir la composición?',
+                    options: [
+                        'Espectrofótometro',
+                        'Refractómetro (Índice de Refracción y °Brix)',
+                        'Cromatógrafo',
+                        'Titulación'
+                    ],
+                    answer: 'Refractómetro (Índice de Refracción y °Brix)'
+                },
+                {
+                    question: '9. Según el reporte, ¿qué efecto tiene el aumento de temperatura en el índice de refracción?',
+                    options: [
+                        'Ninguno',
+                        'Generalmente disminuye el índice de refracción',
+                        'Aumenta el índice',
+                        'Es aleatorio'
+                    ],
+                    answer: 'Generalmente disminuye el índice de refracción'
+                },
+                {
+                    question: '10. ¿Qué modelo termodinámico fue el más adecuado para la simulación?',
+                    options: [
+                        'Raoult simple',
+                        'Gas Ideal',
+                        'DECHEMA-UNIFAC / Antoine extendido',
+                        'Ley de Henry'
+                    ],
+                    answer: 'DECHEMA-UNIFAC / Antoine extendido'
+                },
+                {
+                    question: '11. ¿Qué es la relación de reflujo?',
+                    options: [
+                        '\\(F/D\\)',
+                        'Relación entre líquido retornado y destilado (\\(L/D\\))',
+                        'Relación vapor/líquido en el plato',
+                        'Calor del hervidor'
+                    ],
+                    answer: 'Relación entre líquido retornado y destilado (\\(L/D\\))'
+                },
+                {
+                    question: '12. ¿Qué significa "inundación" en una columna?',
+                    options: [
+                        'Llenar con agua',
+                        'Canalización',
+                        'Límite donde el vapor impide el descenso del líquido',
+                        'Alta pureza'
+                    ],
+                    answer: 'Límite donde el vapor impide el descenso del líquido'
+                },
+                {
+                    question: '13. ¿Qué representa la sección de enriquecimiento?',
+                    options: [
+                        'Debajo de la alimentación',
+                        'Por encima de la alimentación',
+                        'El condensador',
+                        'El hervidor'
+                    ],
+                    answer: 'Por encima de la alimentación'
+                },
+                {
+                    question: '14. ¿Cuál es la ecuación de la línea de operación de enriquecimiento (L.O.S.E.)?',
+                    options: [
+                        '\\(y = x\\)',
+                        '\\(y_{n+1} = \\frac{R}{R+1} x_n + \\frac{x_D}{R+1}\\)',
+                        '\\(y = \\frac{L}{V} x - \\frac{W x_W}{V}\\)',
+                        '\\(P = P_A + P_B\\)'
+                    ],
+                    answer: '\\(y_{n+1} = \\frac{R}{R+1} x_n + \\frac{x_D}{R+1}\\)'
+                },
+                {
+                    question: '15. ¿Cuál fue aproximadamente la eficiencia global calculada en el reporte?',
+                    options: [
+                        '100%',
+                        '37.5%',
+                        '90%',
+                        '5%'
+                    ],
+                    answer: '37.5%'
+                },
+                {
+                    question: '16. Diferencia entre calor sensible y latente:',
+                    options: [
+                        'Son lo mismo',
+                        'Sensible cambia T, latente cambia estado (fase)',
+                        'Sensible para vapor, latente para líquido',
+                        'Latente depende de P, sensible no'
+                    ],
+                    answer: 'Sensible cambia T, latente cambia estado (fase)'
+                },
+                {
+                    question: '17. ¿Qué es el punto de burbuja?',
+                    options: [
+                        'Inicio de la ebullición (primera burbuja de vapor)',
+                        'Inicio de la condensación',
+                        'Punto de ebullición del agua pura',
+                        'Formación de espuma'
+                    ],
+                    answer: 'Inicio de la ebullición (primera burbuja de vapor)'
+                },
+                {
+                    question: '18. ¿Por qué hubo desviaciones con el refractómetro ABBE?',
+                    options: [
+                        'Falta de etanol',
+                        'Sensibilidad térmica y falta de calibración',
+                        'No funciona con líquidos',
+                        'Cambio de presión atmosférica'
+                    ],
+                    answer: 'Sensibilidad térmica y falta de calibración'
+                },
+                {
+                    question: '19. En el balance de energía, ¿qué término retira energía del sistema?',
+                    options: [
+                        '\\(Q_{hervidor}\\)',
+                        '\\(Q_{condensador}\\)',
+                        'Entalpía de alimentación',
+                        'Trabajo de bomba'
+                    ],
+                    answer: '\\(Q_{condensador}\\)'
+                },
+                {
+                    question: '20. ¿Qué pasa con \\(\\alpha\\) cerca del azeótropo?',
+                    options: [
+                        'Se vuelve muy grande',
+                        'Se acerca a 1',
+                        'Se hace negativa',
+                        'Es constante en 2.5'
+                    ],
+                    answer: 'Se acerca a 1'
+                },
+                {
+                    question: '21. Composición aproximada del azeótropo etanol-agua:',
+                    options: [
+                        '50%',
+                        '95-96% v/v',
+                        '100%',
+                        '10%'
+                    ],
+                    answer: '95-96% v/v'
+                },
+                {
+                    question: '22. ¿Qué dice la Ley de Dalton?',
+                    options: [
+                        '\\(P_{total} = \\sum p_i\\) (suma de presiones parciales)',
+                        'Energía no se crea ni destruye',
+                        '\\(PV=nRT\\)',
+                        'Entropía aumenta'
+                    ],
+                    answer: '\\(P_{total} = \\sum p_i\\) (suma de presiones parciales)'
+                },
+                {
+                    question: '23. Relación entre vapor y destilado en un condensador total:',
+                    options: [
+                        '\\(x_D < y_1\\)',
+                        '\\(x_D = y_1\\)',
+                        '\\(x_D > y_1\\)',
+                        'Sin relación'
+                    ],
+                    answer: '\\(x_D = y_1\\)'
+                },
+                {
+                    question: '24. ¿Qué modelo de coeficiente de actividad se usó?',
+                    options: [
+                        'UNIFAC',
+                        'Peng-Robinson',
+                        'Gas Ideal',
+                        'Newton'
+                    ],
+                    answer: 'UNIFAC'
+                },
+                {
+                    question: '25. Efecto de reducir la presión en el sistema etanol-agua:',
+                    options: [
+                        'Dificulta la separación',
+                        'Puede mejorar la separación y desplazar el azeótropo',
+                        'Congela la mezcla',
+                        'Sin efecto'
+                    ],
+                    answer: 'Puede mejorar la separación y desplazar el azeótropo'
+                }
+            ];
+
+            // --- LÓGICA DEL CRONÓMETRO (20 MINUTOS) ---
+            let time = 20 * 60; 
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                const seconds = (time % 60).toString().padStart(2, '0');
+                const timeString = `${minutes}:${seconds}`;
+                timerElement.textContent = timeString;
+                floatingTimerElement.textContent = timeString;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        time = 0;
+                        updateTimerDisplay();
+                        if (!submitButton.disabled) {
+                           alert("¡El tiempo se ha acabado! El cuestionario se calificará automáticamente.");
+                           calculateScore();
+                        }
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // --- RENDERIZADO DEL CUESTIONARIO ---
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.id = `question-${index}`;
+
+                    const questionTitle = document.createElement('p');
+                    questionTitle.className = 'question-title';
+                    questionTitle.textContent = qData.question;
+                    questionCard.appendChild(questionTitle);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'flex flex-col space-y-2';
+                    
+                    qData.options.forEach(option => {
+                        // Crear ID único para cada opción
+                        const optionId = `q${index}-opt-${option.replace(/\s+/g, '-').substring(0, 10)}`;
+                        
+                        optionsContainer.innerHTML += `
+                            <label class="option-label" for="${optionId}">
+                                <input type="radio" id="${optionId}" name="q${index}" value="${option.replace(/"/g, '&quot;')}" class="form-radio" style="color: var(--primary-color);">
+                                <span class="ml-3">${option}</span>
+                            </label>
+                        `;
+                    });
+                    questionCard.appendChild(optionsContainer);
+                    quizContainer.appendChild(questionCard);
+                });
+                
+                // Renderizar MathJax después de insertar el contenido
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            // --- LÓGICA DE CALIFICACIÓN ---
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+                let score = 0;
+                let totalQuestions = quizData.length;
+
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.getElementById(`question-${index}`);
+                    const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                    
+                    // Normalizar respuestas para comparación (manejo de caracteres especiales y LaTeX)
+                    // En un entorno real, sería mejor usar IDs o índices para las respuestas
+                    const isCorrect = userAnswer && userAnswer.value === qData.answer;
+
+                    if (isCorrect) {
+                        score++;
+                        questionCard.classList.add('correct');
+                    } else {
+                        questionCard.classList.add('incorrect');
+                    }
+                });
+
+                submitButton.textContent = 'Cuestionario Finalizado';
+                const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+                
+                let messageClass = percentage >= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${messageClass}">
+                        Tu calificación es: ${score} de ${totalQuestions} (${percentage}%)
+                    </div>
+                `;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // --- LÓGICA DEL CRONÓMETRO FLOTANTE ---
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                if (rect.bottom < 0) { // Si el temporizador principal ya no está visible
+                    floatingTimerElement.style.display = 'block';
+                } else {
+                    floatingTimerElement.style.display = 'none';
+                }
+            }
+
+            // --- INICIALIZACIÓN ---
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay(); // Llamada inicial para mostrar 20:00
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                calculateScore();
+            });
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>
