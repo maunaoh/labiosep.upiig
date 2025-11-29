@@ -98,34 +98,85 @@ document.querySelectorAll(".submenu > a").forEach(item => {
 const modeContent = document.getElementById("mode-content");
 
 const posterHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
+<section class="canva-doc">
+<div style="position: relative; width: 100%; height: 0; padding-top: 309.5900%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG5190i-Vo/VQNEaZ5EyoNQsQ0hfAKJWg/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+
+
+
+
+    <div class="canva-mobile-overlay" id="canva-overlay"></div>
+
+    <div class="canva-scroll-message" id="scroll-message">
+      Desliza para navegar el póster
+    </div>
+  </div>
+
+  <p class="canva-leyenda">
+    Silao de la Victoria, Gto., a viernes 28 de noviembre del 2025
+  </p>
+
+  <div class="boton-descarga">
+    <a href="Póster de Práctica 7_EQ5_LBios_6BM1.pdf" download="Poster_Practica7.pdf">📥 Descargar póster en PDF</a>
+  </div>
+</section>
+
+`;
+
+const reporteHTML = `
+  <div class="pdf-viewer">
+    <embed src="Reporte 7_EQ5_6BM1_LBios.pdf" type="application/pdf" width="75%" height="800px"/>
   </div>
 `;
 
-const placeholderHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
-  </div>
+const inversoHTML = `
+  <iframe src="CuesInverP6.html" 
+          style="width:100%; height: 900px; border:none;">
+  </iframe>
 `;
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const mode = btn.getAttribute("data-mode");
-
-    // Ocultar resumen al elegir un modo
-    const resumen = document.getElementById("resumen-inicial");
-    if (resumen) resumen.style.display = "none";
+    document.getElementById("resumen-inicial").style.display = "none";
 
     if (mode === "poster") {
       modeContent.innerHTML = posterHTML;
-    } else {
-      modeContent.innerHTML = placeholderHTML;
+    } else if (mode === "reporte") {
+      modeContent.innerHTML = reporteHTML;
+    } else if (mode === "inverso") {
+      modeContent.innerHTML = inversoHTML;
     }
   });
 });
+
+
+
+function activarOverlayCanva() {
+  const canvaIframe = document.getElementById("canva-iframe");
+  const canvaOverlay = document.getElementById("canva-overlay");
+  const scrollMessage = document.getElementById("scroll-message");
+
+  if (window.innerWidth <= 768) {
+    canvaOverlay.addEventListener('touchstart', function(e) {
+      canvaIframe.style.pointerEvents = 'auto';
+      if (scrollMessage) scrollMessage.style.display = 'none';
+      e.stopPropagation();
+    });
+
+    document.addEventListener('touchstart', function(e) {
+      if (!canvaOverlay.contains(e.target)) {
+        canvaIframe.style.pointerEvents = 'none';
+        if (scrollMessage) scrollMessage.style.display = 'block';
+      }
+    });
+  }
+}
 
 // No mostrar nada al cargar
 modeContent.innerHTML = "";
