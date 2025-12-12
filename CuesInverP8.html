@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Adsorción</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax para renderizar fórmulas matemáticas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #6b1740; /* rgb(107, 23, 64) */
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+             box-shadow: 0 0 0 3px var(--primary-color);
+             border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background-color: #f7f7f7;
+            border-color: var(--primary-color);
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Práctica 8: Adsorción</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">20:00</div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+    
+    <!-- Cronómetro flotante -->
+    <div id="floating-timer" class="floating-timer">20:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+            const floatingTimerElement = document.getElementById('floating-timer');
+
+            // --- DATOS DEL CUESTIONARIO (25 PREGUNTAS SOBRE ADSORCIÓN) ---
+            const quizData = [
+                {
+                    question: '1. ¿Cuál es la diferencia fundamental entre adsorción y absorción?',
+                    options: [
+                        'La adsorción es un fenómeno de superficie, la absorción penetra todo el volumen',
+                        'La adsorción es química, la absorción es física',
+                        'La adsorción es irreversible, la absorción es reversible',
+                        'No hay diferencia, son sinónimos'
+                    ],
+                    answer: 'La adsorción es un fenómeno de superficie, la absorción penetra todo el volumen'
+                },
+                {
+                    question: '2. En el sistema estudiado, ¿cuál sustancia actúa como adsorbato?',
+                    options: [
+                        'El Carbón Activado',
+                        'El Agua Destilada',
+                        'El Naranja de Metilo',
+                        'La Alúmina'
+                    ],
+                    answer: 'El Naranja de Metilo'
+                },
+                {
+                    question: '3. ¿Qué modelo de isoterma asume una adsorción en monocapa sobre una superficie con sitios energéticamente idénticos?',
+                    options: [
+                        'Isoterma de Freundlich',
+                        'Isoterma Lineal',
+                        'Isoterma de Langmuir',
+                        'Isoterma BET'
+                    ],
+                    answer: 'Isoterma de Langmuir'
+                },
+                {
+                    question: '4. ¿Por qué se eligió una longitud de onda de 465 nm para las mediciones?',
+                    options: [
+                        'Es el estándar para cualquier colorante',
+                        'Fue determinado por un barrido espectral como el pico máximo de absorbancia del naranja de metilo',
+                        'Es la única longitud que lee el espectrofotómetro',
+                        'Para evitar interferencia con la luz ultravioleta'
+                    ],
+                    answer: 'Fue determinado por un barrido espectral como el pico máximo de absorbancia del naranja de metilo'
+                },
+                {
+                    question: '5. ¿Qué indica un valor del factor de separación de Langmuir (\\(R_L\\)) cercano a 0 (ej. 0.004)?',
+                    options: [
+                        'Adsorción desfavorable',
+                        'Adsorción lineal',
+                        'Adsorción altamente favorable o irreversible',
+                        'Error en los cálculos'
+                    ],
+                    answer: 'Adsorción altamente favorable o irreversible'
+                },
+                {
+                    question: '6. ¿Cuál fue el modelo que presentó el mejor ajuste (\\(R^2 > 0.97\\)) a los datos experimentales según el reporte?',
+                    options: [
+                        'Freundlich',
+                        'Langmuir',
+                        'Lineal',
+                        'Ninguno ajustó bien'
+                    ],
+                    answer: 'Langmuir'
+                },
+                {
+                    question: '7. ¿Qué fenómeno causó el aumento aparente de absorbancia en la muestra con 2.5 g de carbón activado?',
+                    options: [
+                        'Desorción del colorante',
+                        'Reacción química que creó más color',
+                        'Dispersión de luz (Efecto Tyndall) por finos de carbón suspendidos',
+                        'Saturación del detector'
+                    ],
+                    answer: 'Dispersión de luz (Efecto Tyndall) por finos de carbón suspendidos'
+                },
+                {
+                    question: '8. ¿Cuál es la característica principal de la isoterma de Freundlich?',
+                    options: [
+                        'Asume una superficie energéticamente heterogénea y adsorción multicapa',
+                        'Asume saturación en monocapa',
+                        'Es válida solo para gases a alta presión',
+                        'Describe una relación lineal infinita'
+                    ],
+                    answer: 'Asume una superficie energéticamente heterogénea y adsorción multicapa'
+                },
+                {
+                    question: '9. ¿Qué efecto tiene generalmente el aumento de temperatura en un proceso de adsorción física (fisisorción)?',
+                    options: [
+                        'Aumenta la cantidad adsorbida',
+                        'Disminuye la cantidad adsorbida (proceso exotérmico)',
+                        'No tiene efecto',
+                        'Cambia el pH de la solución'
+                    ],
+                    answer: 'Disminuye la cantidad adsorbida (proceso exotérmico)'
+                },
+                {
+                    question: '10. ¿Cuál es el propósito de centrifugar las muestras antes de medir la absorbancia?',
+                    options: [
+                        'Oxigenar la muestra',
+                        'Sedimentar el adsorbente (carbón) para medir solo el sobrenadante',
+                        'Mezclar mejor el colorante',
+                        'Aumentar la temperatura por fricción'
+                    ],
+                    answer: 'Sedimentar el adsorbente (carbón) para medir solo el sobrenadante'
+                },
+                {
+                    question: '11. ¿Qué representa \\(C_{max}\\) o \\(q_{max}\\) en la ecuación de Langmuir?',
+                    options: [
+                        'La concentración inicial del soluto',
+                        'La capacidad máxima de adsorción (monocapa completa)',
+                        'La velocidad de adsorción',
+                        'El peso molecular del adsorbato'
+                    ],
+                    answer: 'La capacidad máxima de adsorción (monocapa completa)'
+                },
+                {
+                    question: '12. Según la introducción, ¿qué diferencia la quimisorción de la fisisorción?',
+                    options: [
+                        'La quimisorción implica enlaces covalentes fuertes y es específica',
+                        'La quimisorción es reversible fácilmente',
+                        'La quimisorción usa fuerzas de Van der Waals',
+                        'La quimisorción ocurre a bajas temperaturas solamente'
+                    ],
+                    answer: 'La quimisorción implica enlaces covalentes fuertes y es específica'
+                },
+                {
+                    question: '13. ¿Qué es el "tiempo de ruptura" (\\(t_b\\)) en una columna de lecho fijo?',
+                    options: [
+                        'Cuando se rompe la columna',
+                        'Cuando la concentración de salida alcanza un valor límite máximo permisible',
+                        'El tiempo total de operación hasta saturación completa',
+                        'El tiempo para llenar el tanque'
+                    ],
+                    answer: 'Cuando la concentración de salida alcanza un valor límite máximo permisible'
+                },
+                {
+                    question: '14. En la ecuación linealizada de Langmuir \\(\\frac{C_U}{C_B} = \\frac{1}{C_{max}} C_U + \\frac{1}{K C_{max}}\\), ¿qué representa la pendiente?',
+                    options: [
+                        '\\(1/K\\)',
+                        '\\(1/C_{max}\\)',
+                        '\\(K\\)',
+                        '\\(C_{max}\\)'
+                    ],
+                    answer: '\\(1/C_{max}\\)'
+                },
+                {
+                    question: '15. ¿Por qué el modelo lineal falló al predecir el comportamiento del sistema?',
+                    options: [
+                        'Porque el sistema operó fuera de la región de Henry (dilución infinita) y alcanzó saturación',
+                        'Porque el carbón activado no adsorbe naranja de metilo',
+                        'Porque la ecuación lineal es demasiado compleja',
+                        'Porque se usó muy poco adsorbente'
+                    ],
+                    answer: 'Porque el sistema operó fuera de la región de Henry (dilución infinita) y alcanzó saturación'
+                },
+                {
+                    question: '16. ¿Qué porcentaje de remoción se alcanzó en la mayoría de los experimentos con carbón activado?',
+                    options: [
+                        'Menos del 50%',
+                        'Alrededor del 10%',
+                        'Superior al 95%',
+                        'Exactamente 0%'
+                    ],
+                    answer: 'Superior al 95%'
+                },
+                {
+                    question: '17. ¿Qué método de regeneración se menciona comúnmente para el carbón activado?',
+                    options: [
+                        'Lavado con jabón',
+                        'Ciclo de oscilación de temperatura (Thermal Swing / vapor stripping)',
+                        'Congelación',
+                        'Trituración'
+                    ],
+                    answer: 'Ciclo de oscilación de temperatura (Thermal Swing / vapor stripping)'
+                },
+                {
+                    question: '18. ¿Qué significa que una isoterma sea de "tipo H" (alta afinidad)?',
+                    options: [
+                        'Que adsorbe muy poco',
+                        'Que tiene una pendiente inicial muy pronunciada, adsorbiendo fuertemente a bajas concentraciones',
+                        'Que es lineal en todo el rango',
+                        'Que la desorción es imposible'
+                    ],
+                    answer: 'Que tiene una pendiente inicial muy pronunciada, adsorbiendo fuertemente a bajas concentraciones'
+                },
+                {
+                    question: '19. ¿Cuál es una aplicación biotecnológica de la adsorción mencionada?',
+                    options: [
+                        'Recuperación de proteínas y antibióticos de caldos de fermentación',
+                        'Cultivo de células madre',
+                        'Secuenciación de ADN',
+                        'Pasteurización de leche'
+                    ],
+                    answer: 'Recuperación de proteínas y antibióticos de caldos de fermentación'
+                },
+                {
+                    question: '20. ¿Qué se usó como "blanco" para la calibración del espectrofotómetro?',
+                    options: [
+                        'Naranja de metilo puro',
+                        'Agua destilada',
+                        'Etanol',
+                        'Carbón activado suspendido'
+                    ],
+                    answer: 'Agua destilada'
+                },
+                {
+                    question: '21. Verdadero o Falso: El modelo de Langmuir asume interacciones laterales entre las moléculas adsorbidas.',
+                    options: [
+                        'Verdadero',
+                        'Falso'
+                    ],
+                    answer: 'Falso'
+                },
+                {
+                    question: '22. Verdadero o Falso: La linealización de Freundlich es muy sensible a errores experimentales en bajas concentraciones.',
+                    options: [
+                        'Verdadero',
+                        'Falso'
+                    ],
+                    answer: 'Verdadero'
+                },
+                {
+                    question: '23. Verdadero o Falso: El carbón activado tiene una estructura no porosa.',
+                    options: [
+                        'Verdadero',
+                        'Falso'
+                    ],
+                    answer: 'Falso'
+                },
+                {
+                    question: '24. Verdadero o Falso: Si \\(R_L > 1\\), la adsorción se considera favorable.',
+                    options: [
+                        'Verdadero',
+                        'Falso'
+                    ],
+                    answer: 'Falso'
+                },
+                {
+                    question: '25. Verdadero o Falso: La adsorción es un proceso que puede ocurrir en fase líquida y gaseosa.',
+                    options: [
+                        'Verdadero',
+                        'Falso'
+                    ],
+                    answer: 'Verdadero'
+                }
+            ];
+
+            // --- LÓGICA DEL CRONÓMETRO (20 MINUTOS) ---
+            let time = 20 * 60; 
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                const seconds = (time % 60).toString().padStart(2, '0');
+                const timeString = `${minutes}:${seconds}`;
+                timerElement.textContent = timeString;
+                floatingTimerElement.textContent = timeString;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        time = 0;
+                        updateTimerDisplay();
+                        if (!submitButton.disabled) {
+                           alert("¡El tiempo se ha acabado! El cuestionario se calificará automáticamente.");
+                           calculateScore();
+                        }
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // --- RENDERIZADO DEL CUESTIONARIO ---
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.id = `question-${index}`;
+
+                    const questionTitle = document.createElement('p');
+                    questionTitle.className = 'question-title';
+                    questionTitle.textContent = qData.question;
+                    questionCard.appendChild(questionTitle);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'flex flex-col space-y-2';
+                    
+                    qData.options.forEach(option => {
+                        const optionId = `q${index}-opt-${option.replace(/\s+/g, '-').substring(0, 10)}`;
+                        
+                        optionsContainer.innerHTML += `
+                            <label class="option-label" for="${optionId}">
+                                <input type="radio" id="${optionId}" name="q${index}" value="${option.replace(/"/g, '&quot;')}" class="form-radio" style="color: var(--primary-color);">
+                                <span class="ml-3">${option}</span>
+                            </label>
+                        `;
+                    });
+                    questionCard.appendChild(optionsContainer);
+                    quizContainer.appendChild(questionCard);
+                });
+                
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            // --- LÓGICA DE CALIFICACIÓN ---
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+                let score = 0;
+                let totalQuestions = quizData.length;
+
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.getElementById(`question-${index}`);
+                    const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                    
+                    const isCorrect = userAnswer && userAnswer.value === qData.answer;
+
+                    if (isCorrect) {
+                        score++;
+                        questionCard.classList.add('correct');
+                    } else {
+                        questionCard.classList.add('incorrect');
+                    }
+                });
+
+                submitButton.textContent = 'Cuestionario Finalizado';
+                const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+                
+                let messageClass = percentage >= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${messageClass}">
+                        Tu calificación es: ${score} de ${totalQuestions} (${percentage}%)
+                    </div>
+                `;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // --- LÓGICA DEL CRONÓMETRO FLOTANTE ---
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                if (rect.bottom < 0) { // Si el temporizador principal ya no está visible
+                    floatingTimerElement.style.display = 'block';
+                } else {
+                    floatingTimerElement.style.display = 'none';
+                }
+            }
+
+            // --- INICIALIZACIÓN ---
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay(); // Llamada inicial para mostrar 20:00
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                calculateScore();
+            });
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>

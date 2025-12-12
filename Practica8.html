@@ -61,11 +61,12 @@
   <div id="resumen-inicial" class="resumen">
   <h2>Resumen</h2>
   <p>
-    Esta práctica de laboratorio aún no se ha realizado.
+    En la presente práctica se estableció la isoterma de adsorción del sistema carbón activado-naranja de metilo mediante un proceso por lotes a 30°C, variando la masa del adsorbente y cuantificando el equilibrio por espectrofotometría a 465 nm, 
+    longitud de onda a la que mejor se lee el naranja de metilo, las cantidades iniciales de soluto fueron de 50 ppm. Los resultados demostraron una alta eficiencia, con porcentajes de remoción superiores al 95%. Al contrastar los datos experimentales con los modelos teóricos, 
+    el modelo de Langmuir presentó el mejor ajuste (R2 > 0.97), indicando un mecanismo de adsorción en monocapa sobre una superficie energéticamente homogénea. Asimismo, el cálculo del factor de separación (RL aproximadamente 0.004) confirmó que el proceso es altamente favorable, comportándose casi como irreversible. Finalmente, 
+    se determinó que las desviaciones de absorbancia a altas concentraciones de sólido fueron causadas por interferencias físicas de dispersión de luz (efecto Tyndall) y no por fenómenos químicos.
   </p>
-  <p>
-    ¿Quiere visitar el anexo de información? Hágalo el 13 de octubre, tampoco está acabado :C
-  </p>
+
 </div>
 
   <div class="mode-content" id="mode-content">
@@ -98,34 +99,83 @@ document.querySelectorAll(".submenu > a").forEach(item => {
 const modeContent = document.getElementById("mode-content");
 
 const posterHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
+<section class="canva-doc">
+<div style="position: relative; width: 100%; height: 0; padding-top: 175.0366%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG6zo4zwrI/vPpnKqoGOq4F3hzJmOHKNA/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+
+
+    <div class="canva-mobile-overlay" id="canva-overlay"></div>
+
+    <div class="canva-scroll-message" id="scroll-message">
+      Desliza para navegar el póster
+    </div>
+  </div>
+
+  <p class="canva-leyenda">
+    Silao de la Victoria, Gto., a jueves 11 de diciembre del 2025.
+  </p>
+
+  <div class="boton-descarga">
+    <a href="Póster de Práctica 7_EQ5_LBios_6BM1.pdf" download="Poster_Practica7.pdf">📥 Descargar póster en PDF</a>
+  </div>
+</section>
+
+`;
+
+const reporteHTML = `
+  <div class="pdf-viewer">
+    <embed src="Reporte 8_EQ5_6BM1_LBios.pdf" type="application/pdf" width="75%" height="800px"/>
   </div>
 `;
 
-const placeholderHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
-  </div>
+const inversoHTML = `
+  <iframe src="CuesInverP8.html" 
+          style="width:100%; height: 900px; border:none;">
+  </iframe>
 `;
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const mode = btn.getAttribute("data-mode");
-
-    // Ocultar resumen al elegir un modo
-    const resumen = document.getElementById("resumen-inicial");
-    if (resumen) resumen.style.display = "none";
+    document.getElementById("resumen-inicial").style.display = "none";
 
     if (mode === "poster") {
       modeContent.innerHTML = posterHTML;
-    } else {
-      modeContent.innerHTML = placeholderHTML;
+    } else if (mode === "reporte") {
+      modeContent.innerHTML = reporteHTML;
+    } else if (mode === "inverso") {
+      modeContent.innerHTML = inversoHTML;
     }
   });
 });
+
+
+
+function activarOverlayCanva() {
+  const canvaIframe = document.getElementById("canva-iframe");
+  const canvaOverlay = document.getElementById("canva-overlay");
+  const scrollMessage = document.getElementById("scroll-message");
+
+  if (window.innerWidth <= 768) {
+    canvaOverlay.addEventListener('touchstart', function(e) {
+      canvaIframe.style.pointerEvents = 'auto';
+      if (scrollMessage) scrollMessage.style.display = 'none';
+      e.stopPropagation();
+    });
+
+    document.addEventListener('touchstart', function(e) {
+      if (!canvaOverlay.contains(e.target)) {
+        canvaIframe.style.pointerEvents = 'none';
+        if (scrollMessage) scrollMessage.style.display = 'block';
+      }
+    });
+  }
+}
 
 // No mostrar nada al cargar
 modeContent.innerHTML = "";
