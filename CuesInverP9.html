@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Inverso - Secado de Sólidos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax para renderizar fórmulas matemáticas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #6b1740; /* rgb(107, 23, 64) */
+            --primary-color-dark: #581c3c;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #1f2937;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card:focus-within {
+             box-shadow: 0 0 0 3px var(--primary-color);
+             border-color: var(--primary-color);
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .results-summary {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            background-color: #f7f7f7;
+            border-color: var(--primary-color);
+        }
+        .floating-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="main-container">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--primary-color);">Cuestionario Inverso</h1>
+            <p class="text-gray-600 mt-2 text-lg">Práctica 9: Secado de Sólidos</p>
+        </div>
+
+        <div id="main-timer-container" class="flex justify-center mb-8">
+            <div id="timer" class="timer">10:00</div>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+
+        <div class="mt-8">
+            <button id="submit-btn" class="submit-btn">Calificar Cuestionario</button>
+        </div>
+
+        <div id="results" class="mt-10"></div>
+    </div>
+    
+    <!-- Cronómetro flotante -->
+    <div id="floating-timer" class="floating-timer">10:00</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+            const timerElement = document.getElementById('timer');
+            const mainTimerContainer = document.getElementById('main-timer-container');
+            const floatingTimerElement = document.getElementById('floating-timer');
+
+            // --- DATOS DEL CUESTIONARIO (15 PREGUNTAS SOBRE SECADO) ---
+            const quizData = [
+                {
+                    question: '1. ¿Cuál es la definición fundamental de la operación unitaria de secado según el reporte?',
+                    options: [
+                        'La eliminación mecánica de agua mediante prensas o centrífugas',
+                        'La separación de pequeñas cantidades de líquido de un sólido mediante vaporización térmica',
+                        'La evaporación de grandes cantidades de agua a su punto de ebullición',
+                        'La adsorción de humedad del aire por un sólido deshidratado'
+                    ],
+                    answer: 'La separación de pequeñas cantidades de líquido de un sólido mediante vaporización térmica'
+                },
+                {
+                    question: '2. En el secado, ¿qué dos mecanismos de transferencia ocurren simultáneamente?',
+                    options: [
+                        'Transferencia de calor y transferencia de masa',
+                        'Transferencia de momento y transferencia de electricidad',
+                        'Transferencia de calor y reacción química',
+                        'Filtración y sedimentación'
+                    ],
+                    answer: 'Transferencia de calor y transferencia de masa'
+                },
+                {
+                    question: '3. ¿Qué representa la "Humedad de Equilibrio" (\\(X^*\\))?',
+                    options: [
+                        'La cantidad total de agua en el sólido al inicio del proceso',
+                        'El límite de humedad al que puede llegar un sólido expuesto a un gas en condiciones específicas por tiempo prolongado',
+                        'La humedad que se puede eliminar fácilmente por métodos mecánicos',
+                        'La cantidad de agua que excede la capacidad de saturación del aire'
+                    ],
+                    answer: 'El límite de humedad al que puede llegar un sólido expuesto a un gas en condiciones específicas por tiempo prolongado'
+                },
+                {
+                    question: '4. ¿Cómo se define la "Humedad Libre" (\\(X\\))?',
+                    options: [
+                        'La humedad total menos la humedad de equilibrio: \\(X = X_t - X^*\\)',
+                        'La humedad ligada químicamente al sólido',
+                        'El agua que ejerce una presión de vapor menor a la del agua pura',
+                        'La humedad contenida en los poros más profundos'
+                    ],
+                    answer: 'La humedad total menos la humedad de equilibrio: \\(X = X_t - X^*\\)'
+                },
+                {
+                    question: '5. ¿Qué caracteriza al "Periodo de Velocidad Constante" (\\(R_c\\)) en la curva de secado?',
+                    options: [
+                        'La superficie del sólido está seca y la evaporación ocurre en el interior',
+                        'La superficie del sólido se mantiene completamente mojada y se comporta como agua pura',
+                        'La temperatura del sólido aumenta rápidamente hasta la temperatura del aire',
+                        'La velocidad de secado disminuye linealmente con la humedad'
+                    ],
+                    answer: 'La superficie del sólido se mantiene completamente mojada y se comporta como agua pura'
+                },
+                {
+                    question: '6. ¿Qué es el "Contenido Crítico de Humedad" (\\(X_c\\))?',
+                    options: [
+                        'El punto donde la velocidad de secado es cero',
+                        'El punto de inflexión donde termina la velocidad constante y comienza la velocidad decreciente',
+                        'La humedad máxima que puede tener el sólido',
+                        'El contenido de humedad al inicio del experimento'
+                    ],
+                    answer: 'El punto de inflexión donde termina la velocidad constante y comienza la velocidad decreciente'
+                },
+                {
+                    question: '7. En el periodo de velocidad decreciente, ¿qué factor controla principalmente la velocidad de secado?',
+                    options: [
+                        'La velocidad del aire y la turbulencia externa',
+                        'La difusión interna del líquido o vapor hacia la superficie',
+                        'La presión atmosférica exclusivamente',
+                        'La capacidad del ventilador'
+                    ],
+                    answer: 'La difusión interna del líquido o vapor hacia la superficie'
+                },
+                {
+                    question: '8. Según los resultados experimentales con el pan blanco, ¿por qué no se observó un periodo de velocidad constante extenso?',
+                    options: [
+                        'Porque el aire estaba demasiado húmedo',
+                        'Porque el pan es un material higroscópico con alta resistencia interna a la difusión',
+                        'Porque el ventilador se apagó',
+                        'Porque la temperatura era demasiado alta'
+                    ],
+                    answer: 'Porque el pan es un material higroscópico con alta resistencia interna a la difusión'
+                },
+                {
+                    question: '9. ¿Qué indica termodinámicamente que la temperatura de entrada del aire sea igual a la temperatura de salida (\\(T_{ent} \\approx T_{sal}\\)) al final del experimento?',
+                    options: [
+                        'Que el sistema ha alcanzado el equilibrio térmico y el secado se ha detenido',
+                        'Que la velocidad de secado es máxima',
+                        'Que el equipo está fallando',
+                        'Que el aire se ha saturado completamente'
+                    ],
+                    answer: 'Que el sistema ha alcanzado el equilibrio térmico y el secado se ha detenido'
+                },
+                {
+                    question: '10. ¿Cuál es la ecuación general para calcular la velocidad de secado \\(R\\)?',
+                    options: [
+                        '\\(R = -\\frac{L_s}{A_s} \\frac{dX}{dt}\\)',
+                        '\\(R = \\frac{W - W_s}{t}\\)',
+                        '\\(R = k (T - T_i)\\)',
+                        '\\(R = X_t - X^*\\)'
+                    ],
+                    answer: '\\(R = -\\frac{L_s}{A_s} \\frac{dX}{dt}\\)'
+                },
+                {
+                    question: '11. ¿Qué es un material higroscópico?',
+                    options: [
+                        'Un material que repele el agua completamente',
+                        'Un material que absorbe o adsorbe humedad del ambiente hasta alcanzar un equilibrio',
+                        'Un material que se disuelve en agua',
+                        'Un sólido que no tiene poros'
+                    ],
+                    answer: 'Un material que absorbe o adsorbe humedad del ambiente hasta alcanzar un equilibrio'
+                },
+                {
+                    question: '12. En el cálculo del coeficiente de transferencia de masa \\(k_y\\), ¿a qué temperatura se asume que está la interfaz aire-sólido durante el periodo constante?',
+                    options: [
+                        'A la temperatura de bulbo seco del aire',
+                        'A la temperatura de bulbo húmedo (\\(T_{bh}\\))',
+                        'A \\(100^{\\circ}\\text{C}\\)',
+                        'A \\(0^{\\circ}\\text{C}\\)'
+                    ],
+                    answer: 'A la temperatura de bulbo húmedo (\\(T_{bh}\\))'
+                },
+                {
+                    question: '13. ¿Qué efecto tuvo la variación de la temperatura ambiente (día vs. tarde) en el experimento?',
+                    options: [
+                        'Ninguno, el secador es adiabático perfecto',
+                        'Alteró el perfil de temperatura de entrada y la capacidad de secado del aire',
+                        'Hizo que el pan ganara peso',
+                        'Aumentó la velocidad del ventilador'
+                    ],
+                    answer: 'Alteró el perfil de temperatura de entrada y la capacidad de secado del aire'
+                },
+                {
+                    question: '14. ¿Cuál fue el valor aproximado de la humedad de equilibrio (\\(X^*\\)) determinado experimentalmente para el pan?',
+                    options: [
+                        '0.0 kg agua/kg sólido seco (secado total)',
+                        '\\(\\approx 0.1413\\) kg agua/kg sólido seco',
+                        '0.50 kg agua/kg sólido seco',
+                        '1.0 kg agua/kg sólido seco'
+                    ],
+                    answer: '\\(\\approx 0.1413\\) kg agua/kg sólido seco'
+                },
+                {
+                    question: '15. ¿Qué representa la "Humedad en Base Seca" (\\(X_t\\))?',
+                    options: [
+                        'La relación entre la masa de agua y la masa de sólidos totales secos',
+                        'La relación entre la masa de agua y la masa total húmeda',
+                        'El porcentaje de agua en el aire',
+                        'La cantidad de sólido que se pierde'
+                    ],
+                    answer: 'La relación entre la masa de agua y la masa de sólidos totales secos'
+                }
+            ];
+
+            // --- LÓGICA DEL CRONÓMETRO (10 MINUTOS) ---
+            let time = 10 * 60; 
+            let timerInterval;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+                const seconds = (time % 60).toString().padStart(2, '0');
+                const timeString = `${minutes}:${seconds}`;
+                timerElement.textContent = timeString;
+                floatingTimerElement.textContent = timeString;
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (time <= 0) {
+                        clearInterval(timerInterval);
+                        time = 0;
+                        updateTimerDisplay();
+                        if (!submitButton.disabled) {
+                           alert("¡El tiempo se ha acabado! El cuestionario se calificará automáticamente.");
+                           calculateScore();
+                        }
+                        return;
+                    }
+                    time--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // --- RENDERIZADO DEL CUESTIONARIO ---
+            function renderQuiz() {
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.id = `question-${index}`;
+
+                    const questionTitle = document.createElement('p');
+                    questionTitle.className = 'question-title';
+                    questionTitle.textContent = qData.question;
+                    questionCard.appendChild(questionTitle);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'flex flex-col space-y-2';
+                    
+                    qData.options.forEach(option => {
+                        const optionId = `q${index}-opt-${option.replace(/\s+/g, '-').substring(0, 10)}`;
+                        
+                        optionsContainer.innerHTML += `
+                            <label class="option-label" for="${optionId}">
+                                <input type="radio" id="${optionId}" name="q${index}" value="${option.replace(/"/g, '&quot;')}" class="form-radio" style="color: var(--primary-color);">
+                                <span class="ml-3">${option}</span>
+                            </label>
+                        `;
+                    });
+                    questionCard.appendChild(optionsContainer);
+                    quizContainer.appendChild(questionCard);
+                });
+                
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            // --- LÓGICA DE CALIFICACIÓN ---
+            function calculateScore() {
+                clearInterval(timerInterval);
+                submitButton.disabled = true;
+                let score = 0;
+                let totalQuestions = quizData.length;
+
+                quizData.forEach((qData, index) => {
+                    const questionCard = document.getElementById(`question-${index}`);
+                    const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                    
+                    const isCorrect = userAnswer && userAnswer.value === qData.answer;
+
+                    if (isCorrect) {
+                        score++;
+                        questionCard.classList.add('correct');
+                    } else {
+                        questionCard.classList.add('incorrect');
+                    }
+                });
+
+                submitButton.textContent = 'Cuestionario Finalizado';
+                const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+                
+                let messageClass = percentage >= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                
+                resultsContainer.innerHTML = `
+                    <div class="results-summary ${messageClass}">
+                        Tu calificación es: ${score} de ${totalQuestions} (${percentage}%)
+                    </div>
+                `;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // --- LÓGICA DEL CRONÓMETRO FLOTANTE ---
+            function handleScroll() {
+                const rect = mainTimerContainer.getBoundingClientRect();
+                if (rect.bottom < 0) { // Si el temporizador principal ya no está visible
+                    floatingTimerElement.style.display = 'block';
+                } else {
+                    floatingTimerElement.style.display = 'none';
+                }
+            }
+
+            // --- INICIALIZACIÓN ---
+            renderQuiz();
+            startTimer();
+            updateTimerDisplay(); // Llamada inicial para mostrar 10:00
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                calculateScore();
+            });
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>
