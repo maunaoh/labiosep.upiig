@@ -60,12 +60,17 @@
   </div>
   <div id="resumen-inicial" class="resumen">
   <h2>Resumen</h2>
-  <p>
-    Esta práctica de laboratorio aún no se ha realizado.
-  </p>
-  <p>
-    ¿Quiere visitar el anexo de información? Hágalo el 13 de octubre, tampoco está acabado :C
-  </p>
+<p>
+        En esta práctica se analizó la cinética de secado de pan blanco en un sistema de túnel adiabático durante 530 minutos, con el objetivo de evaluar los fenómenos de transporte y las variables operativas.
+        Se determinó que el material es altamente higroscópico, alcanzando una humedad de equilibrio (<i>X<sup>*</sup></i>) de <strong>0.1413 kg H<sub>2</sub>O/kg sólido seco</strong>, 
+        lo cual impone un límite termodinámico al proceso.
+    </p>
+    <p>
+        El análisis de la curva de secado reveló una humedad crítica (<i>X<sub>c</sub></i>) de <strong>0.2906</strong> y una velocidad máxima de secado de <strong>1.3108 kg/(min&middot;m<sup>2</sup>)</strong>,
+        permitiendo calcular un coeficiente de transferencia de masa (<i>k<sub>y</sub></i>) de <strong>524.32 kg aire seco/(min&middot;m<sup>2</sup>)</strong>. 
+        Se concluyó que el proceso carece de un periodo de velocidad constante significativo, siendo controlado por la difusión interna debido a la naturaleza porosa del pan.
+        Finalmente, se removieron <strong>294.32 g</strong> de agua, confirmando el fin de la operación mediante la convergencia térmica entre la entrada y salida del secador.
+    </p>
 </div>
 
   <div class="mode-content" id="mode-content">
@@ -98,34 +103,83 @@ document.querySelectorAll(".submenu > a").forEach(item => {
 const modeContent = document.getElementById("mode-content");
 
 const posterHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
+<section class="canva-doc">
+<div style="position: relative; width: 100%; height: 0; padding-top: 248.4627%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG7P-dRcF0/m39LOZgztViLXzN-KqVZNw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+
+
+    <div class="canva-mobile-overlay" id="canva-overlay"></div>
+
+    <div class="canva-scroll-message" id="scroll-message">
+      Desliza para navegar el póster
+    </div>
+  </div>
+
+  <p class="canva-leyenda">
+    Silao de la Victoria, Gto., a martes 16 de diciembre del 2025.
+  </p>
+
+  <div class="boton-descarga">
+    <a href="Póster de Práctica 9_EQ5_LBios_6BM1.pdf" download="Poster_Practica9.pdf">📥 Descargar póster en PDF</a>
+  </div>
+</section>
+
+`;
+
+const reporteHTML = `
+  <div class="pdf-viewer">
+    <embed src="Reporte 9_EQ5_6BM1_LBios.pdf" type="application/pdf" width="75%" height="800px"/>
   </div>
 `;
 
-const placeholderHTML = `
-  <div class="temp-content">
-    <p>No disponible, página en construcción, para bajar el estrés admire estos gatitos:</p>
-    <img src="FUERTEHERMOZURA.png" alt="Gatitos relajantes">
-  </div>
+const inversoHTML = `
+  <iframe src="CuesInverP9.html" 
+          style="width:100%; height: 900px; border:none;">
+  </iframe>
 `;
 
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const mode = btn.getAttribute("data-mode");
-
-    // Ocultar resumen al elegir un modo
-    const resumen = document.getElementById("resumen-inicial");
-    if (resumen) resumen.style.display = "none";
+    document.getElementById("resumen-inicial").style.display = "none";
 
     if (mode === "poster") {
       modeContent.innerHTML = posterHTML;
-    } else {
-      modeContent.innerHTML = placeholderHTML;
+    } else if (mode === "reporte") {
+      modeContent.innerHTML = reporteHTML;
+    } else if (mode === "inverso") {
+      modeContent.innerHTML = inversoHTML;
     }
   });
 });
+
+
+
+function activarOverlayCanva() {
+  const canvaIframe = document.getElementById("canva-iframe");
+  const canvaOverlay = document.getElementById("canva-overlay");
+  const scrollMessage = document.getElementById("scroll-message");
+
+  if (window.innerWidth <= 768) {
+    canvaOverlay.addEventListener('touchstart', function(e) {
+      canvaIframe.style.pointerEvents = 'auto';
+      if (scrollMessage) scrollMessage.style.display = 'none';
+      e.stopPropagation();
+    });
+
+    document.addEventListener('touchstart', function(e) {
+      if (!canvaOverlay.contains(e.target)) {
+        canvaIframe.style.pointerEvents = 'none';
+        if (scrollMessage) scrollMessage.style.display = 'block';
+      }
+    });
+  }
+}
 
 // No mostrar nada al cargar
 modeContent.innerHTML = "";
